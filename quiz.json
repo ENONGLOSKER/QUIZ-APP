@@ -1,0 +1,17 @@
+{
+  "title": "Pengetahuan Umum",
+  "questions": [
+    {
+      "question": "Ibukota Indonesia adalah?",
+      "answers": ["Surabaya", "Bandung", "Jakarta", "Medan"],
+      "correct": 2,
+      "points": 100
+    },
+    {
+      "question": "Planet terdekat dari Matahari?",
+      "answers": ["Venus", "Mars", "Merkurius", "Bumi"],
+      "correct": 2,
+      "points": 150
+    }
+  ]
+}

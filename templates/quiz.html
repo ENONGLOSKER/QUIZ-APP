@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz — EduVerse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00f7ff;
+      --secondary: #ff2a6d;
+      --dark: #050a1a;
+      --darker: #02050d;
+    }
+
+    body {
+      font-family: 'Exo 2', sans-serif;
+      background: var(--dark);
+      color: #e0e0ff;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.5s ease;
+    }
+
+    /* Background Universe */
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: radial-gradient(ellipse at center, #0c1445 0%, var(--darker) 100%);
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 4s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px #00a3aa;
+    }
+
+    .gradient-title {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #00a3aa);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 247, 255, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 247, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+    }
+
+    /* Card */
+    .card {
+      background: rgba(15, 25, 55, 0.4);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 247, 255, 0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    /* Answer Button */
+    .answer-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background: rgba(30, 40, 70, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Exo 2';
+    }
+
+    .answer-btn:hover {
+      border-color: var(--primary);
+      background: rgba(0, 247, 255, 0.1);
+    }
+
+    .answer-btn.correct {
+      background: rgba(0, 255, 100, 0.2);
+      border-color: rgba(0, 255, 100, 0.5);
+    }
+
+    .answer-btn.incorrect {
+      background: rgba(255, 50, 50, 0.2);
+      border-color: rgba(255, 50, 50, 0.5);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem 2rem;
+      background: rgba(5, 10, 26, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary);
+    }
+
+    /* Result Screen */
+    .result-screen {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary);
+      animation: fall 3s linear forwards;
+      z-index: 100;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Wrong Answer Full Screen */
+    .wrong-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .wrong-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Rank Badge */
+    .rank-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .rank-gold {
+      background: linear-gradient(45deg, #ffd700, #ffcc00);
+      color: #000;
+    }
+
+    .rank-silver {
+      background: linear-gradient(45deg, #c0c0c0, #a9a9a9);
+      color: #000;
+    }
+
+    .rank-bronze {
+      background: linear-gradient(45deg, #cd7f32, #b87333);
+      color: #000;
+    }
+
+    /* Recommendation Card */
+    .recommendation-card {
+      background: linear-gradient(135deg, rgba(0, 179, 119, 0.1), rgba(0, 212, 141, 0.1));
+      border: 1px solid rgba(0, 212, 141, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    /* Timer */
+    #timer {
+      font-family: 'Orbitron';
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Background Stars -->
+  <div id="background"></div>
+
+  <!-- Wrong Answer Full Screen Overlay -->
+  <div class="wrong-overlay" id="wrongOverlay">
+    <div class="text-center">
+      <h1 class="text-6xl font-bold text-white mb-4">SALAH ❌</h1>
+      <p class="text-xl mb-6">Jawabanmu belum tepat. Pelajari lagi ya!</p>
+      <button onclick="hideWrongOverlay()" class="btn btn-outline text-white">Coba Lagi</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-brand">🚀 EduVerse Quiz</div>
+    <div>
+      <span id="timer" class="text-lg font-mono">00:00</span>
+    </div>
+  </header>
+
+  <!-- Quiz Container -->
+  <main class="container mx-auto px-4 py-8">
+    <div id="quizContainer" class="max-w-4xl mx-auto">
+      <!-- Quiz Content will be rendered here -->
+    </div>
+  </main>
+
+  <script>
+    // ========== BACKGROUND STARS ==========
+    const background = document.getElementById('background');
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.width = `${Math.random() * 2 + 1}px`;
+      star.style.height = star.style.width;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.animationDelay = `${Math.random() * 5}s`;
+      background.appendChild(star);
+    }
+
+    // ========== STATE ==========
+    let currentQuiz = null;
+    let currentQuizId = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let startTime = null;
+    let questionStartTime = null;
+    let timerInterval = null;
+    let answers = []; // Array to store answer data
+
+    // ========== INIT ==========
+    function init() {
+      // Get quiz data from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const quizId = urlParams.get('id');
+      
+      if (!quizId) {
+        alert('❌ Quiz tidak ditemukan!');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Try to get quiz from localStorage (admin quizzes)
+      let found = false;
+      const adminUsers = JSON.parse(localStorage.getItem('quizCreators') || '{}');
+      
+      for (const username in adminUsers) {
+        const quizzes = JSON.parse(localStorage.getItem(`adminQuizzes_${username}`) || '{}');
+        if (quizzes[quizId]) {
+          currentQuiz = quizzes[quizId];
+          currentQuizId = quizId;
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        alert('❌ Quiz tidak ditemukan!');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Initialize quiz
+      startTime = new Date();
+      startTimer();
+      showQuestion();
+    }
+
+    // ========== TIMER ==========
+    function startTimer() {
+      let seconds = 0;
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        document.getElementById('timer').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    // ========== RENDER QUESTION ==========
+    function showQuestion() {
+      questionStartTime = new Date();
+      
+      const container = document.getElementById('quizContainer');
+      const question = currentQuiz.questions[currentQuestionIndex];
+      
+      container.innerHTML = `
+        <div class="card">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Soal ${currentQuestionIndex + 1} dari ${currentQuiz.questions.length}</h2>
+            <div class="text-sm text-gray-400">Poin: ${question.points}</div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-bar" style="width: ${((currentQuestionIndex) / currentQuiz.questions.length) * 100}%"></div>
+          </div>
+          
+          <h3 class="text-lg mb-6">${question.question}</h3>
+          
+          <div id="answersContainer">
+            ${question.answers.map((answer, idx) => `
+              <button class="answer-btn" onclick="selectAnswer(${idx})">
+                ${['A', 'B', 'C', 'D'][idx]}. ${answer}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ========== HANDLE ANSWER SELECTION ==========
+    function selectAnswer(selectedIndex) {
+      const question = currentQuiz.questions[currentQuestionIndex];
+      const isCorrect = selectedIndex === question.correct;
+      const timeSpent = Math.floor((new Date() - questionStartTime) / 1000);
+      
+      // Record answer
+      answers.push({
+        questionIndex: currentQuestionIndex,
+        selectedAnswer: selectedIndex,
+        isCorrect: isCorrect,
+        timeSpent: timeSpent
+      });
+      
+      // Update score
+      if (isCorrect) {
+        score += question.points;
+      } else {
+        // Show wrong answer overlay
+        showWrongOverlay();
+        return;
+      }
+      
+      // Show feedback
+      const answerButtons = document.querySelectorAll('.answer-btn');
+      answerButtons.forEach((btn, idx) => {
+        if (idx === question.correct) {
+          btn.classList.add('correct');
+        } else if (idx === selectedIndex) {
+          btn.classList.add('incorrect');
+        }
+        btn.disabled = true;
+      });
+      
+      // Next question after 2 seconds
+      setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuiz.questions.length) {
+          showQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 2000);
+    }
+
+    // ========== WRONG OVERLAY ==========
+    function showWrongOverlay() {
+      document.getElementById('wrongOverlay').classList.add('active');
+      
+      // Auto hide after 2 seconds
+      setTimeout(() => {
+        hideWrongOverlay();
+      }, 2000);
+    }
+
+    function hideWrongOverlay() {
+      document.getElementById('wrongOverlay').classList.remove('active');
+    }
+
+    // ========== FINISH QUIZ ==========
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      const totalTime = Math.floor((new Date() - startTime) / 1000);
+      const maxScore = currentQuiz.questions.reduce((sum, q) => sum + q.points, 0);
+      const percentage = Math.round((score / maxScore) * 100);
+      
+      // Determine rank
+      let rank = "Bronze";
+      let rankClass = "rank-bronze";
+      if (percentage >= 90) {
+        rank = "Gold";
+        rankClass = "rank-gold";
+      } else if (percentage >= 70) {
+        rank = "Silver";
+        rankClass = "rank-silver";
+      }
+      
+      // Generate recommendations
+      const recommendations = generateRecommendations();
+      
+      // Save attempt to localStorage (for admin analytics)
+      const attemptData = {
+        date: new Date().toISOString(),
+        score: score,
+        totalQuestions: currentQuiz.questions.length,
+        correctAnswers: answers,
+        totalTime: totalTime,
+        user: 'anonymous'
+      };
+      
+      // Find admin username who owns this quiz
+      let adminUsername = null;
+      const adminUsers = JSON.parse(localStorage.getItem('quizCreators') || '{}');
+      
+      for (const username in adminUsers) {
+        const quizzes = JSON.parse(localStorage.getItem(`adminQuizzes_${username}`) || '{}');
+        if (quizzes[currentQuizId]) {
+          adminUsername = username;
+          break;
+        }
+      }
+      
+      if (adminUsername) {
+        // Load existing analytics
+        const analyticsKey = `adminAnalytics_${adminUsername}`;
+        let analytics = JSON.parse(localStorage.getItem(analyticsKey) || '{}');
+        
+        if (!analytics[currentQuizId]) {
+          analytics[currentQuizId] = {
+            attempts: [],
+            recommendations: []
+          };
+        }
+        
+        // Add this attempt
+        analytics[currentQuizId].attempts.push(attemptData);
+        
+        // Save back to localStorage
+        localStorage.setItem(analyticsKey, JSON.stringify(analytics));
+      }
+      
+      // Show result screen
+      showResultScreen(score, maxScore, percentage, rank, rankClass, recommendations, totalTime);
+    }
+
+    function generateRecommendations() {
+      const correctAnswers = answers.filter(a => a.isCorrect).length;
+      const totalQuestions = answers.length;
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+      
+      const recommendations = [];
+      
+      if (percentage < 50) {
+        recommendations.push("🔴 Fokus pada konsep dasar. Pelajari lagi materi fundamental sebelum mencoba quiz lagi.");
+        recommendations.push("📚 Gunakan buku teks atau video pembelajaran untuk memahami topik yang sulit.");
+      } else if (percentage < 70) {
+        recommendations.push("🟡 Kamu sudah memahami sebagian besar materi. Fokus pada area yang masih lemah.");
+        recommendations.push("⏱️ Latihan soal dengan timer untuk meningkatkan kecepatan dan akurasi.");
+      } else if (percentage < 90) {
+        recommendations.push("🟢 Performa bagus! Tingkatkan pemahamanmu dengan soal-soal yang lebih menantang.");
+        recommendations.push("🎯 Fokus pada detail kecil yang mungkin terlewatkan dalam soal.");
+      } else {
+        recommendations.push("⭐ Luar biasa! Kamu menguasai materi ini dengan sangat baik.");
+        recommendations.push("🚀 Coba tantangan yang lebih tinggi atau ajarkan materi ini kepada temanmu.");
+      }
+      
+      // Add time-based recommendation
+      const avgTimePerQuestion = answers.reduce((sum, a) => sum + a.timeSpent, 0) / answers.length;
+      if (avgTimePerQuestion > 60) {
+        recommendations.push("⏱️ Kamu menghabiskan waktu cukup lama per soal. Coba latihan untuk meningkatkan kecepatan.");
+      } else if (avgTimePerQuestion < 15) {
+        recommendations.push("🔍 Kamu menjawab sangat cepat. Pastikan untuk membaca soal dengan teliti sebelum menjawab.");
+      }
+      
+      return recommendations;
+    }
+
+    function showResultScreen(score, maxScore, percentage, rank, rankClass, recommendations, totalTime) {
+      const container = document.getElementById('quizContainer');
+      
+      container.innerHTML = `
+        <div class="result-screen card">
+          <h2 class="text-3xl font-bold mb-4">🎉 Quiz Selesai!</h2>
+          
+          <div class="text-5xl font-bold my-6">${score}</div>
+          <div class="text-xl mb-2">Poin Total</div>
+          <div class="text-lg mb-6">(${percentage}%)</div>
+          
+          <div class="rank-badge ${rankClass}">🏆 Rank: ${rank}</div>
+          
+          <div class="text-lg mb-8">Waktu: ${Math.floor(totalTime / 60)}:${(totalTime % 60).toString().padStart(2, '0')}</div>
+          
+          <div class="recommendation-card">
+            <h3 class="text-xl font-bold mb-4">💡 Rekomendasi untuk Peningkatan</h3>
+            <div class="space-y-3">
+              ${recommendations.map(rec => `
+                <div class="p-3 bg-black/20 rounded-lg border-l-4 border-cyan-400">
+                  ${rec}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <button onclick="window.location.href='index.html'" class="btn btn-primary">
+            🏠 Kembali ke Beranda
+          </button>
+        </div>
+      `;
+      
+      // Add confetti effect for good scores
+      if (percentage >= 70) {
+        createConfetti();
+      }
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.backgroundColor = ['#00f7ff', '#ff2a6d', '#00d48d', '#f8e71c'][Math.floor(Math.random() * 4)];
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        document.body.appendChild(confetti);
+        
+        // Remove confetti after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+
+    // ========== INIT ON LOAD ==========
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>

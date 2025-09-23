@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Admin — EduVerse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00f7ff;
+      --secondary: #ff2a6d;
+      --dark: #050a1a;
+      --darker: #02050d;
+    }
+
+    body {
+      font-family: 'Exo 2', sans-serif;
+      background: var(--dark);
+      color: #e0e0ff;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Background Universe */
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: radial-gradient(ellipse at center, #0c1445 0%, var(--darker) 100%);
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 4s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px #00a3aa;
+    }
+
+    .gradient-title {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #00a3aa);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 247, 255, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 247, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #a00037, #ff2a6d);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      box-shadow: 0 6px 20px rgba(255, 42, 109, 0.5);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #00b377, #00d48d);
+      color: white;
+    }
+
+    /* Card */
+    .card {
+      background: rgba(15, 25, 55, 0.4);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 247, 255, 0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(0, 247, 255, 0.15);
+    }
+
+    /* Stat Card */
+    .stat-card {
+      background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), rgba(0, 163, 170, 0.1));
+      border: 1px solid rgba(0, 247, 255, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, var(--primary), #00a3aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Quiz Item */
+    .quiz-item {
+      background: rgba(20, 30, 60, 0.4);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .quiz-item:hover {
+      border-color: var(--primary);
+      background: rgba(0, 247, 255, 0.05);
+    }
+
+    .quiz-actions button {
+      margin-left: 0.5rem;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem 2rem;
+      background: rgba(5, 10, 26, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary);
+    }
+
+    /* Section */
+    section {
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(145deg, #0f0f2a, #1a1a3a);
+      padding: 2.5rem;
+      border-radius: 25px;
+      width: 100%;
+      max-width: 800px;
+      border: 2px solid var(--primary);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #333;
+      color: #888;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* Form Styles */
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,247,255,0.3);
+      border-radius: 10px;
+      color: white;
+      font-family: 'Exo 2';
+    }
+
+    .form-label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+      font-weight: 600;
+      font-family: 'Orbitron';
+    }
+
+    /* Question Item */
+    .question-item {
+      background: rgba(30, 40, 70, 0.4);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .remove-question {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 42, 109, 0.3);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0,247,255,0.3);
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-family: 'Orbitron';
+      font-weight: 600;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+    }
+
+    /* Chart Container */
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin: 2rem 0;
+    }
+
+    /* Recommendation Card */
+    .recommendation-card {
+      background: linear-gradient(135deg, rgba(0, 179, 119, 0.1), rgba(0, 212, 141, 0.1));
+      border: 1px solid rgba(0, 212, 141, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Background Stars -->
+  <div id="background"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-brand">🚀 EduVerse Admin</div>
+    <button onclick="logout()" class="btn btn-outline">🚪 Logout</button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    
+    <!-- Profile Section -->
+    <section class="mb-10">
+      <div class="card">
+        <h2 class="text-2xl font-bold mb-4 glow-text">👋 Selamat Datang, <span id="adminName">Loading...</span></h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div><strong>Username:</strong> <span id="profileUsername">-</span></div>
+          <div><strong>Nomor WA:</strong> <span id="profileWA">Tidak diatur</span></div>
+          <div><strong>Bergabung Sejak:</strong> <span id="profileCreatedAt">-</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="mb-10">
+      <h2 class="section-title gradient-title">📊 Statistik & Analisis</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="stat-card">
+          <div class="stat-number" id="totalQuizzes">0</div>
+          <div>Quiz Dibuat</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalQuestions">0</div>
+          <div>Total Soal</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="avgPoints">0</div>
+          <div>Rata-rata Poin</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalAttempts">0</div>
+          <div>Percobaan Quiz</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="mb-10">
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('dashboard')">📈 Dashboard</div>
+        <div class="tab" onclick="showTab('create')">➕ Buat Quiz</div>
+        <div class="tab" onclick="showTab('analytics')">🧠 Analisis Pemahaman</div>
+      </div>
+
+      <!-- Dashboard Tab -->
+      <div id="tab-dashboard">
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+          <button onclick="showCreateQuizModal()" class="btn btn-primary">
+            ➕ Buat Quiz Baru
+          </button>
+          <button onclick="showImportModal()" class="btn btn-outline">
+            📥 Import Quiz (JSON)
+          </button>
+        </div>
+
+        <h3 class="text-xl font-bold mb-4">📚 Daftar Quiz Anda</h3>
+        <div id="quizList" class="space-y-4">
+          <!-- Dinamis diisi JS -->
+          <div class="text-center py-10 text-gray-400">Belum ada quiz. Klik "Buat Quiz Baru" untuk memulai.</div>
+        </div>
+      </div>
+
+      <!-- Create Quiz Tab (hidden by default) -->
+      <div id="tab-create" class="hidden">
+        <div class="card">
+          <h3 class="text-2xl font-bold mb-6">➕ Buat Quiz Baru</h3>
+          <form id="createQuizForm">
+            <label class="form-label">Judul Quiz</label>
+            <input type="text" id="quizTitle" class="form-control" placeholder="Contoh: Ujian Matematika Bab 3" required>
+
+            <label class="form-label">Deskripsi (Opsional)</label>
+            <textarea id="quizDescription" class="form-control" rows="3" placeholder="Deskripsi quiz..."></textarea>
+
+            <div class="flex justify-between items-center mt-6 mb-4">
+              <h4 class="font-bold text-lg">📝 Soal</h4>
+              <button type="button" onclick="addQuestion()" class="btn btn-outline text-sm">+ Tambah Soal</button>
+            </div>
+
+            <div id="questionsContainer">
+              <!-- Soal akan ditambahkan di sini -->
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-6">💾 Simpan Quiz</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Analytics Tab (hidden by default) -->
+      <div id="tab-analytics" class="hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="card">
+            <h3 class="text-xl font-bold mb-4">📊 Grafik Performa</h3>
+            <div class="chart-container">
+              <canvas id="performanceChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-bold mb-4">🎯 Tingkat Kesulitan Soal</h3>
+            <div class="chart-container">
+              <canvas id="difficultyChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="recommendation-card mt-8">
+          <h3 class="text-xl font-bold mb-4 flex items-center">
+            <span>💡 Rekomendasi untuk Peningkatan Pemahaman</span>
+          </h3>
+          <div id="recommendations" class="space-y-3">
+            <p>📊 <strong>Analisis akan muncul setelah ada data percobaan quiz.</strong></p>
+            <p>🎯 Untuk mendapatkan rekomendasi, minta siswa mengerjakan quiz Anda dan kumpulkan data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Import Modal -->
+  <div class="modal" id="importModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="hideImportModal()">×</button>
+      <h3 class="text-2xl font-bold mb-4 glow-text">📥 Import Quiz dari JSON</h3>
+      <p class="mb-4 text-gray-300">Unggah file .json yang berisi struktur quiz.</p>
+      <input type="file" id="jsonFile" accept=".json" class="w-full p-3 mb-4 bg-gray-800 rounded-lg text-white border border-gray-600">
+      <button onclick="handleImport()" class="btn btn-primary w-full mb-3">Import Sekarang</button>
+      <button onclick="hideImportModal()" class="btn btn-outline w-full">Batal</button>
+      <p id="importStatus" class="mt-3 text-sm text-green-400 hidden">✅ Import berhasil!</p>
+    </div>
+  </div>
+
+  <!-- Edit Quiz Modal -->
+  <div class="modal" id="editQuizModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="hideEditModal()">×</button>
+      <h3 class="text-2xl font-bold mb-6 glow-text">✏️ Edit Quiz</h3>
+      <form id="editQuizForm">
+        <input type="hidden" id="editQuizId">
+        <label class="form-label">Judul Quiz</label>
+        <input type="text" id="editQuizTitle" class="form-control" placeholder="Contoh: Ujian Matematika Bab 3" required>
+
+        <label class="form-label">Deskripsi (Opsional)</label>
+        <textarea id="editQuizDescription" class="form-control" rows="3" placeholder="Deskripsi quiz..."></textarea>
+
+        <div class="flex justify-between items-center mt-6 mb-4">
+          <h4 class="font-bold text-lg">📝 Soal</h4>
+          <button type="button" onclick="addQuestionToEdit()" class="btn btn-outline text-sm">+ Tambah Soal</button>
+        </div>
+
+        <div id="editQuestionsContainer">
+          <!-- Soal akan ditambahkan di sini -->
+        </div>
+
+        <div class="flex gap-4 mt-6">
+          <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
+          <button type="button" onclick="hideEditModal()" class="btn btn-outline">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ========== BACKGROUND STARS ==========
+    const background = document.getElementById('background');
+    for (let i = 0; i < 150; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.width = `${Math.random() * 2 + 1}px`;
+      star.style.height = star.style.width;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.animationDelay = `${Math.random() * 5}s`;
+      background.appendChild(star);
+    }
+
+    // ========== STATE ==========
+    let currentUser = '';
+    let quizzes = {};
+    let analytics = {}; // { quizId: { attempts: [], recommendations: [] } }
+
+    // ========== INIT ==========
+    function init() {
+      currentUser = localStorage.getItem('currentUser');
+      if (!currentUser) {
+        alert('⚠️ Anda harus login dulu!');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      loadUserData();
+      loadQuizzes();
+      loadAnalytics();
+      renderProfile();
+      renderStats();
+      renderQuizList();
+      initCharts();
+    }
+
+    // ========== USER DATA ==========
+    function loadUserData() {
+      const users = JSON.parse(localStorage.getItem('quizCreators') || '{}');
+      const user = users[currentUser];
+      if (user) {
+        document.getElementById('adminName').textContent = currentUser;
+        document.getElementById('profileUsername').textContent = currentUser;
+        document.getElementById('profileWA').textContent = user.wa || 'Tidak diatur';
+        if (user.createdAt) {
+          const date = new Date(user.createdAt);
+          document.getElementById('profileCreatedAt').textContent = date.toLocaleDateString('id-ID');
+        }
+      }
+    }
+
+    // ========== QUIZZES ==========
+    function loadQuizzes() {
+      const saved = localStorage.getItem('adminQuizzes_' + currentUser);
+      quizzes = saved ? JSON.parse(saved) : {};
+    }
+
+    function saveQuizzes() {
+      localStorage.setItem('adminQuizzes_' + currentUser, JSON.stringify(quizzes));
+    }
+
+    // ========== ANALYTICS ==========
+    function loadAnalytics() {
+      const saved = localStorage.getItem('adminAnalytics_' + currentUser);
+      analytics = saved ? JSON.parse(saved) : {};
+    }
+
+    function saveAnalytics() {
+      localStorage.setItem('adminAnalytics_' + currentUser, JSON.stringify(analytics));
+    }
+
+    // data analytics 
+    function simulateAnalytics() {
+      updateCharts();
+      renderRecommendations();
+    }
+
+    // ========== RENDER ==========
+    function renderProfile() {
+      // Already handled in loadUserData
+    }
+
+    function renderStats() {
+      const quizKeys = Object.keys(quizzes);
+      const totalQuizzes = quizKeys.length;
+      let totalQuestions = 0;
+      let totalPoints = 0;
+
+      quizKeys.forEach(key => {
+        const quiz = quizzes[key];
+        totalQuestions += quiz.questions.length;
+        quiz.questions.forEach(q => totalPoints += q.points);
+      });
+
+      const avgPoints = totalQuestions > 0 ? (totalPoints / totalQuestions).toFixed(1) : 0;
+      const totalAttempts = Object.values(analytics).reduce((sum, quizData) => sum + quizData.attempts.length, 0);
+
+      document.getElementById('totalQuizzes').textContent = totalQuizzes;
+      document.getElementById('totalQuestions').textContent = totalQuestions;
+      document.getElementById('avgPoints').textContent = avgPoints;
+      document.getElementById('totalAttempts').textContent = totalAttempts;
+    }
+
+    function renderQuizList() {
+      const container = document.getElementById('quizList');
+      const quizKeys = Object.keys(quizzes);
+
+      if (quizKeys.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-gray-400">Belum ada quiz. Klik "Buat Quiz Baru" untuk memulai.</div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+
+      quizKeys.forEach(key => {
+        const quiz = quizzes[key];
+        const item = document.createElement('div');
+        item.className = 'quiz-item';
+        item.innerHTML = `
+          <div>
+            <h3 class="font-bold text-lg">${quiz.title}</h3>
+            <p class="text-gray-300 text-sm">${quiz.questions.length} soal • ${analytics[key]?.attempts.length || 0} percobaan</p>
+          </div>
+          <div class="quiz-actions">
+            <button onclick="editQuiz('${key}')" class="btn btn-outline text-xs">✏️ Edit</button>
+            <button onclick="exportQuiz('${key}')" class="btn btn-outline text-xs">📤 Export</button>
+            <button onclick="viewAnalytics('${key}')" class="btn btn-success text-xs">📊 Analisis</button>
+            <button onclick="deleteQuiz('${key}')" class="btn btn-danger text-xs">🗑️ Hapus</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // ========== CHARTS ==========
+    let performanceChart = null;
+    let difficultyChart = null;
+
+    function initCharts() {
+      const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+      const difficultyCtx = document.getElementById('difficultyChart').getContext('2d');
+
+      performanceChart = new Chart(performanceCtx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Skor Rata-rata',
+            data: [],
+            borderColor: '#00f7ff',
+            backgroundColor: 'rgba(0, 247, 255, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#e0e0ff',
+                font: {
+                  family: 'Orbitron'
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                color: '#aaa',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              }
+            },
+            x: {
+              ticks: {
+                color: '#aaa',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              }
+            }
+          }
+        }
+      });
+
+      difficultyChart = new Chart(difficultyCtx, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Tingkat Kesulitan (Persentase Benar)',
+            data: [],
+            backgroundColor: '#ff2a6d',
+            borderColor: '#ff2a6d',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#e0e0ff',
+                font: {
+                  family: 'Orbitron'
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                color: '#aaa',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              }
+            },
+            x: {
+              ticks: {
+                color: '#aaa',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateCharts() {
+      // Performance Chart - rata-rata skor per quiz
+      const quizKeys = Object.keys(analytics);
+      const labels = [];
+      const data = [];
+
+      quizKeys.forEach(quizId => {
+        const quiz = quizzes[quizId];
+        if (!quiz) return;
+        
+        const attempts = analytics[quizId].attempts;
+        if (attempts.length === 0) return;
+        
+        const avgScore = attempts.reduce((sum, a) => sum + a.score, 0) / attempts.length;
+        
+        labels.push(quiz.title.length > 15 ? quiz.title.substring(0, 15) + '...' : quiz.title);
+        data.push(Math.round(avgScore));
+      });
+
+      performanceChart.data.labels = labels;
+      performanceChart.data.datasets[0].data = data;
+      performanceChart.update();
+
+      // Difficulty Chart - persentase benar per soal (ambil quiz pertama untuk demo)
+      if (quizKeys.length > 0) {
+        const firstQuizId = quizKeys[0];
+        const quiz = quizzes[firstQuizId];
+        const attempts = analytics[firstQuizId]?.attempts || [];
+        
+        if (attempts.length > 0 && quiz) {
+          const questionLabels = [];
+          const questionData = [];
+          
+          quiz.questions.forEach((q, idx) => {
+            const totalAttempts = attempts.length;
+            const correctAttempts = attempts.filter(a => 
+              a.correctAnswers.find(ca => ca.questionIndex === idx && ca.isCorrect)
+            ).length;
+            
+            const percentage = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
+            
+            questionLabels.push(`Soal ${idx + 1}`);
+            questionData.push(percentage);
+          });
+          
+          difficultyChart.data.labels = questionLabels;
+          difficultyChart.data.datasets[0].data = questionData;
+          difficultyChart.data.datasets[0].label = `Tingkat Kesulitan: ${quiz.title}`;
+          difficultyChart.update();
+        }
+      }
+    }
+
+    // ========== RECOMMENDATIONS ==========
+    function generateRecommendations(quizId) {
+      const quiz = quizzes[quizId];
+      const attempts = analytics[quizId]?.attempts || [];
+      
+      if (attempts.length === 0) {
+        analytics[quizId].recommendations = ["Belum ada data percobaan untuk menganalisis."];
+        return;
+      }
+      
+      const recommendations = [];
+      
+      // Analisis soal yang paling sering salah
+      const questionStats = {};
+      quiz.questions.forEach((q, idx) => {
+        questionStats[idx] = {
+          total: 0,
+          correct: 0,
+          avgTime: 0
+        };
+      });
+      
+      attempts.forEach(attempt => {
+        attempt.correctAnswers.forEach(ca => {
+          questionStats[ca.questionIndex].total++;
+          if (ca.isCorrect) {
+            questionStats[ca.questionIndex].correct++;
+          }
+          questionStats[ca.questionIndex].avgTime += ca.timeSpent;
+        });
+      });
+      
+      // Hitung persentase dan rata-rata waktu
+      Object.keys(questionStats).forEach(idx => {
+        const stat = questionStats[idx];
+        if (stat.total > 0) {
+          stat.percentage = Math.round((stat.correct / stat.total) * 100);
+          stat.avgTime = Math.round(stat.avgTime / stat.total);
+        } else {
+          stat.percentage = 0;
+          stat.avgTime = 0;
+        }
+      });
+      
+      // Rekomendasi 1: Soal dengan tingkat kesalahan tinggi
+      const hardQuestions = Object.keys(questionStats)
+        .filter(idx => questionStats[idx].percentage < 50)
+        .map(idx => ({
+          index: parseInt(idx),
+          percentage: questionStats[idx].percentage,
+          avgTime: questionStats[idx].avgTime
+        }))
+        .sort((a, b) => a.percentage - b.percentage);
+      
+      if (hardQuestions.length > 0) {
+        recommendations.push(`🔴 **Fokus pada soal yang sulit**: Soal nomor ${hardQuestions.map(h => h.index + 1).join(', ')} memiliki tingkat kesalahan tinggi (${hardQuestions[0].percentage}% benar). Berikan penjelasan tambahan atau contoh soal serupa.`);
+      }
+      
+      // Rekomendasi 2: Soal yang memakan waktu lama
+      const timeConsumingQuestions = Object.keys(questionStats)
+        .filter(idx => questionStats[idx].avgTime > 45)
+        .map(idx => ({
+          index: parseInt(idx),
+          avgTime: questionStats[idx].avgTime,
+          percentage: questionStats[idx].percentage
+        }))
+        .sort((a, b) => b.avgTime - a.avgTime);
+      
+      if (timeConsumingQuestions.length > 0) {
+        recommendations.push(`⏱️ **Optimasi waktu pengerjaan**: Soal nomor ${timeConsumingQuestions.map(t => t.index + 1).join(', ')} memakan waktu rata-rata ${timeConsumingQuestions[0].avgTime} detik. Pertimbangkan untuk menyederhanakan soal atau memberikan petunjuk.`);
+      }
+      
+      // Rekomendasi 3: Tren skor
+      if (attempts.length >= 3) {
+        const scores = attempts.map(a => a.score).sort((a, b) => new Date(a.date) - new Date(b.date));
+        const firstAvg = scores.slice(0, Math.ceil(scores.length/2)).reduce((a, b) => a + b, 0) / Math.ceil(scores.length/2);
+        const lastAvg = scores.slice(Math.floor(scores.length/2)).reduce((a, b) => a + b, 0) / Math.floor(scores.length/2);
+        
+        if (lastAvg > firstAvg + 10) {
+          recommendations.push(`📈 **Peningkatan signifikan terdeteksi!** Skor rata-rata meningkat dari ${Math.round(firstAvg)} ke ${Math.round(lastAvg)}. Pertahankan metode pembelajaran ini!`);
+        } else if (lastAvg < firstAvg - 10) {
+          recommendations.push(`📉 **Penurunan performa terdeteksi.** Skor rata-rata turun dari ${Math.round(firstAvg)} ke ${Math.round(lastAvg)}. Evaluasi ulang materi atau metode penyampaian.`);
+        } else {
+          recommendations.push(`📊 **Stabilitas performa.** Skor rata-rata tetap stabil di sekitar ${Math.round((firstAvg + lastAvg)/2)}. Pertimbangkan variasi soal untuk meningkatkan pemahaman.`);
+        }
+      }
+      
+      // Jika tidak ada rekomendasi spesifik
+      if (recommendations.length === 0) {
+        recommendations.push("✅ **Performa baik!** Tidak ada area yang memerlukan perhatian khusus saat ini.");
+      }
+      
+      analytics[quizId].recommendations = recommendations;
+    }
+
+    function renderRecommendations() {
+      const container = document.getElementById('recommendations');
+      
+      // Ambil quiz pertama yang punya data
+      const quizKeys = Object.keys(analytics).filter(key => analytics[key].attempts.length > 0);
+      
+      if (quizKeys.length === 0) {
+        container.innerHTML = `
+          <p>📊 <strong>Analisis akan muncul setelah ada data percobaan quiz.</strong></p>
+          <p>🎯 Untuk mendapatkan rekomendasi, minta siswa mengerjakan quiz Anda dan kumpulkan data.</p>
+        `;
+        return;
+      }
+      
+      const firstQuizId = quizKeys[0];
+      const recommendations = analytics[firstQuizId].recommendations;
+      
+      container.innerHTML = recommendations.map(rec => `
+        <div class="p-3 bg-black/20 rounded-lg border-l-4 border-cyan-400">
+          ${rec}
+        </div>
+      `).join('');
+    }
+
+    // ========== CREATE QUIZ FORM ==========
+    function showCreateQuizModal() {
+      showTab('create');
+      // Scroll to top
+      document.querySelector('#tab-create').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function addQuestion() {
+      const container = document.getElementById('questionsContainer');
+      const questionIndex = container.children.length;
+      
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question-item';
+      questionDiv.innerHTML = `
+        <button type="button" class="remove-question" onclick="this.parentElement.remove()">×</button>
+        <label class="form-label">Pertanyaan ${questionIndex + 1}</label>
+        <input type="text" name="questionText[]" class="form-control" placeholder="Tulis pertanyaan..." required>
+        
+        <label class="form-label">Pilihan Jawaban</label>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <input type="text" name="answer0[]" class="form-control" placeholder="Pilihan A" required>
+          <input type="text" name="answer1[]" class="form-control" placeholder="Pilihan B" required>
+          <input type="text" name="answer2[]" class="form-control" placeholder="Pilihan C" required>
+          <input type="text" name="answer3[]" class="form-control" placeholder="Pilihan D" required>
+        </div>
+        
+        <label class="form-label">Jawaban Benar</label>
+        <select name="correctAnswer[]" class="form-control" required>
+          <option value="">Pilih Jawaban Benar</option>
+          <option value="0">A</option>
+          <option value="1">B</option>
+          <option value="2">C</option>
+          <option value="3">D</option>
+        </select>
+        
+        <label class="form-label">Poin</label>
+        <input type="number" name="points[]" class="form-control" value="100" min="1" required>
+      `;
+      
+      container.appendChild(questionDiv);
+    }
+
+    // ========== EDIT QUIZ ==========
+    function editQuiz(quizId) {
+      const quiz = quizzes[quizId];
+      if (!quiz) return;
+      
+      // Show edit modal
+      document.getElementById('editQuizModal').classList.add('active');
+      
+      // Fill form with quiz data
+      document.getElementById('editQuizId').value = quizId;
+      document.getElementById('editQuizTitle').value = quiz.title;
+      document.getElementById('editQuizDescription').value = quiz.description || '';
+      
+      // Clear questions container
+      const container = document.getElementById('editQuestionsContainer');
+      container.innerHTML = '';
+      
+      // Add existing questions
+      quiz.questions.forEach((question, index) => {
+        addQuestionToEdit(question, index);
+      });
+    }
+    
+    function addQuestionToEdit(question = null, index = null) {
+      const container = document.getElementById('editQuestionsContainer');
+      const questionIndex = index !== null ? index : container.children.length;
+      
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question-item';
+      questionDiv.innerHTML = `
+        <button type="button" class="remove-question" onclick="this.parentElement.remove()">×</button>
+        <label class="form-label">Pertanyaan ${questionIndex + 1}</label>
+        <input type="text" name="questionText[]" class="form-control" placeholder="Tulis pertanyaan..." value="${question ? question.question : ''}" required>
+        
+        <label class="form-label">Pilihan Jawaban</label>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <input type="text" name="answer0[]" class="form-control" placeholder="Pilihan A" value="${question && question.answers ? question.answers[0] : ''}" required>
+          <input type="text" name="answer1[]" class="form-control" placeholder="Pilihan B" value="${question && question.answers ? question.answers[1] : ''}" required>
+          <input type="text" name="answer2[]" class="form-control" placeholder="Pilihan C" value="${question && question.answers ? question.answers[2] : ''}" required>
+          <input type="text" name="answer3[]" class="form-control" placeholder="Pilihan D" value="${question && question.answers ? question.answers[3] : ''}" required>
+        </div>
+        
+        <label class="form-label">Jawaban Benar</label>
+        <select name="correctAnswer[]" class="form-control" required>
+          <option value="">Pilih Jawaban Benar</option>
+          <option value="0" ${question && question.correct === 0 ? 'selected' : ''}>A</option>
+          <option value="1" ${question && question.correct === 1 ? 'selected' : ''}>B</option>
+          <option value="2" ${question && question.correct === 2 ? 'selected' : ''}>C</option>
+          <option value="3" ${question && question.correct === 3 ? 'selected' : ''}>D</option>
+        </select>
+        
+        <label class="form-label">Poin</label>
+        <input type="number" name="points[]" class="form-control" value="${question ? question.points : 100}" min="1" required>
+      `;
+      
+      container.appendChild(questionDiv);
+    }
+    
+    function hideEditModal() {
+      document.getElementById('editQuizModal').classList.remove('active');
+    }
+    
+    document.getElementById('editQuizForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const quizId = document.getElementById('editQuizId').value;
+      const title = document.getElementById('editQuizTitle').value.trim();
+      if (!title) {
+        alert('Judul quiz wajib diisi.');
+        return;
+      }
+      
+      const questionElements = document.querySelectorAll('.question-item');
+      if (questionElements.length === 0) {
+        alert('Minimal tambahkan 1 soal.');
+        return;
+      }
+      
+      const questions = [];
+      let hasError = false;
+      
+      questionElements.forEach((el, idx) => {
+        const text = el.querySelector('input[name="questionText[]"]').value.trim();
+        const answers = [
+          el.querySelector('input[name="answer0[]"]').value.trim(),
+          el.querySelector('input[name="answer1[]"]').value.trim(),
+          el.querySelector('input[name="answer2[]"]').value.trim(),
+          el.querySelector('input[name="answer3[]"]').value.trim()
+        ];
+        const correct = parseInt(el.querySelector('select[name="correctAnswer[]"]').value);
+        const points = parseInt(el.querySelector('input[name="points[]"]').value);
+        
+        if (!text) {
+          alert(`Pertanyaan ${idx + 1} wajib diisi.`);
+          hasError = true;
+          return;
+        }
+        
+        if (answers.some(a => !a)) {
+          alert(`Semua pilihan jawaban di pertanyaan ${idx + 1} wajib diisi.`);
+          hasError = true;
+          return;
+        }
+        
+        if (isNaN(correct) || correct < 0 || correct > 3) {
+          alert(`Pilih jawaban benar untuk pertanyaan ${idx + 1}.`);
+          hasError = true;
+          return;
+        }
+        
+        if (isNaN(points) || points < 1) {
+          alert(`Poin untuk pertanyaan ${idx + 1} minimal 1.`);
+          hasError = true;
+          return;
+        }
+        
+        questions.push({
+          question: text,
+          answers: answers,
+          correct: correct,
+          points: points
+        });
+      });
+      
+      if (hasError) return;
+      
+      const description = document.getElementById('editQuizDescription').value.trim();
+      
+      // Update quiz
+      quizzes[quizId] = {
+        title: title,
+        description: description,
+        questions: questions,
+        createdAt: quizzes[quizId].createdAt || new Date().toISOString()
+      };
+      
+      saveQuizzes();
+      renderStats();
+      renderQuizList();
+      
+      // Close modal
+      hideEditModal();
+      
+      alert('✅ Quiz berhasil diperbarui!');
+      showTab('dashboard');
+    });
+
+    // ========== CREATE QUIZ FORM ==========
+    document.getElementById('createQuizForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('quizTitle').value.trim();
+      if (!title) {
+        alert('Judul quiz wajib diisi.');
+        return;
+      }
+      
+      const questionElements = document.querySelectorAll('.question-item');
+      if (questionElements.length === 0) {
+        alert('Minimal tambahkan 1 soal.');
+        return;
+      }
+      
+      const questions = [];
+      let hasError = false;
+      
+      questionElements.forEach((el, idx) => {
+        const text = el.querySelector('input[name="questionText[]"]').value.trim();
+        const answers = [
+          el.querySelector('input[name="answer0[]"]').value.trim(),
+          el.querySelector('input[name="answer1[]"]').value.trim(),
+          el.querySelector('input[name="answer2[]"]').value.trim(),
+          el.querySelector('input[name="answer3[]"]').value.trim()
+        ];
+        const correct = parseInt(el.querySelector('select[name="correctAnswer[]"]').value);
+        const points = parseInt(el.querySelector('input[name="points[]"]').value);
+        
+        if (!text) {
+          alert(`Pertanyaan ${idx + 1} wajib diisi.`);
+          hasError = true;
+          return;
+        }
+        
+        if (answers.some(a => !a)) {
+          alert(`Semua pilihan jawaban di pertanyaan ${idx + 1} wajib diisi.`);
+          hasError = true;
+          return;
+        }
+        
+        if (isNaN(correct) || correct < 0 || correct > 3) {
+          alert(`Pilih jawaban benar untuk pertanyaan ${idx + 1}.`);
+          hasError = true;
+          return;
+        }
+        
+        if (isNaN(points) || points < 1) {
+          alert(`Poin untuk pertanyaan ${idx + 1} minimal 1.`);
+          hasError = true;
+          return;
+        }
+        
+        questions.push({
+          question: text,
+          answers: answers,
+          correct: correct,
+          points: points
+        });
+      });
+      
+      if (hasError) return;
+      
+      const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const description = document.getElementById('quizDescription').value.trim();
+      
+      quizzes[quizId] = {
+        title: title,
+        description: description,
+        questions: questions,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Inisialisasi analytics untuk quiz baru
+      analytics[quizId] = {
+        attempts: [],
+        recommendations: []
+      };
+      
+      saveQuizzes();
+      saveAnalytics();
+      renderStats();
+      renderQuizList();
+      
+      // Reset form
+      document.getElementById('createQuizForm').reset();
+      document.getElementById('questionsContainer').innerHTML = '';
+      
+      alert('✅ Quiz berhasil dibuat!');
+      showTab('dashboard');
+    });
+
+    // ========== ACTIONS ==========
+    function showImportModal() {
+      document.getElementById('importModal').classList.add('active');
+    }
+
+    function hideImportModal() {
+      document.getElementById('importModal').classList.remove('active');
+      document.getElementById('jsonFile').value = '';
+      document.getElementById('importStatus').classList.add('hidden');
+    }
+
+    function handleImport() {
+      const fileInput = document.getElementById('jsonFile');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert('Pilih file JSON terlebih dahulu.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          
+          // Validasi struktur
+          if (!imported.title || !Array.isArray(imported.questions)) {
+            throw new Error('Format JSON tidak valid.');
+          }
+
+          // Generate ID unik
+          const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          quizzes[quizId] = imported;
+          
+          // Inisialisasi analytics
+          analytics[quizId] = {
+            attempts: [],
+            recommendations: []
+          };
+          
+          saveQuizzes();
+          saveAnalytics();
+          
+          document.getElementById('importStatus').classList.remove('hidden');
+          setTimeout(() => {
+            hideImportModal();
+            renderStats();
+            renderQuizList();
+          }, 1500);
+
+        } catch (err) {
+          alert('❌ Gagal mengimpor: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function exportQuiz(quizId) {
+      const quiz = quizzes[quizId];
+      if (!quiz) return;
+
+      const dataStr = JSON.stringify(quiz, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${quiz.title.replace(/\s+/g, '_')}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function viewAnalytics(quizId) {
+      showTab('analytics');
+      updateCharts();
+      renderRecommendations();
+      document.querySelector('#tab-analytics').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteQuiz(quizId) {
+      if (confirm('⚠️ Yakin ingin menghapus quiz ini? Tindakan tidak bisa dibatalkan.')) {
+        delete quizzes[quizId];
+        delete analytics[quizId];
+        saveQuizzes();
+        saveAnalytics();
+        renderStats();
+        renderQuizList();
+        alert('✅ Quiz berhasil dihapus.');
+      }
+    }
+
+    function logout() {
+      if (confirm('🚪 Yakin ingin logout?')) {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('userMode');
+        window.location.href = 'index.html';
+      }
+    }
+
+    // ========== TABS ==========
+    function showTab(tabName) {
+      // Hide all tabs
+      document.getElementById('tab-dashboard').classList.add('hidden');
+      document.getElementById('tab-create').classList.add('hidden');
+      document.getElementById('tab-analytics').classList.add('hidden');
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
+      
+      // Jika pindah ke analytics, update chart
+      if (tabName === 'analytics') {
+        simulateAnalytics();
+      }
+    }
+
+    // ========== INIT ON LOAD ==========
+    window.addEventListener('load', init);
+
+    // Tambahkan 1 soal default saat halaman dimuat
+    window.addEventListener('load', function() {
+      // Tambahkan event listener untuk form setelah halaman dimuat
+      const createForm = document.getElementById('createQuizForm');
+      if (createForm) {
+        // Tambahkan 1 soal default
+        addQuestion();
+      }
+    });
+  </script>
+</body>
+</html>
