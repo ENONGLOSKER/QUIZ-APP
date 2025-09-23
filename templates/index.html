@@ -151,6 +151,15 @@
       box-shadow: 0 10px 30px rgba(255, 42, 109, 0.6);
     }
 
+    .btn-dashboard {
+      background: linear-gradient(135deg, #7b2cbf, #5a189a);
+      color: white;
+    }
+
+    .btn-dashboard:hover {
+      box-shadow: 0 10px 30px rgba(123, 44, 191, 0.6);
+    }
+
     /* Hero Section */
     .hero {
       position: relative;
@@ -233,60 +242,7 @@
       color: var(--secondary);
     }
 
-    /* Preview Quiz */
-    .preview-quiz {
-      background: rgba(10, 20, 40, 0.7);
-      border-radius: 24px;
-      padding: 2.5rem;
-      border: 2px solid rgba(0, 247, 255, 0.3);
-      max-width: 600px;
-      margin: 0 auto 4rem;
-    }
-
-    .preview-question {
-      font-size: 1.25rem;
-      margin-bottom: 1.5rem;
-      min-height: 60px;
-    }
-
-    .preview-answer {
-      display: block;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .preview-answer:hover {
-      border-color: var(--primary);
-      background: rgba(0, 247, 255, 0.1);
-    }
-
-    .preview-feedback {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      font-weight: bold;
-      display: none;
-    }
-
-    .feedback-correct {
-      background: rgba(0, 255, 100, 0.15);
-      border: 1px solid rgba(0, 255, 100, 0.4);
-      color: #50ff80;
-    }
-
-    .feedback-wrong {
-      background: rgba(255, 50, 50, 0.15);
-      border: 1px solid rgba(255, 50, 50, 0.4);
-      color: #ff7070;
-    }
-
-    /* Quiz List */
+    /* Available Quizzes Section */
     .quiz-list {
       background: rgba(15, 25, 55, 0.4);
       backdrop-filter: blur(10px);
@@ -324,25 +280,53 @@
       color: #aaa;
     }
 
-    /* History Section */
-    .history-item {
-      background: rgba(30, 40, 70, 0.3);
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 0.75rem;
+    /* Features Section */
+    .features-container {
+      background: rgba(15, 25, 55, 0.4);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 3rem;
+      border: 2px solid rgba(0, 247, 255, 0.3);
+      margin: 4rem auto;
+      max-width: 1200px;
+    }
+
+    .feature-card {
+      background: rgba(30, 40, 70, 0.4);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      text-align: center;
+      height: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
     }
 
-    .history-score {
-      font-weight: bold;
-      color: #00f7ff;
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 30px rgba(0, 247, 255, 0.2);
     }
 
-    .history-low {
-      color: #ff2a6d;
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .feature-desc {
+      font-size: 1rem;
+      color: #ccc;
+      line-height: 1.6;
     }
 
     /* Modal */
@@ -430,6 +414,11 @@
       color: var(--primary);
     }
 
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
     /* Sections */
     section {
       padding: 80px 20px;
@@ -458,6 +447,69 @@
       text-align: center;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 100px 20px 60px;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      
+      .cta-section {
+        padding: 2rem 1.5rem;
+        margin-bottom: 3rem;
+      }
+      
+      .features-container {
+        padding: 2rem 1.5rem;
+        margin: 3rem auto;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+      
+      section {
+        padding: 60px 20px;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 80px 20px 40px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .nav-buttons {
+        gap: 0.5rem;
+      }
+      
+      .nav-buttons .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -471,21 +523,22 @@
 
   <!-- Navigation -->
   <nav>
-    <div class="nav-brand">🚀 EduVerse</div>
-    <div class="flex gap-3">
+    <div class="nav-brand">🚀</div>
+    <div class="nav-buttons">
       <button onclick="showInfoModal()" class="btn btn-outline text-sm px-4 py-2">ℹ️ Info Fitur</button>
+      <button onclick="goToDashboard()" class="btn btn-dashboard text-sm px-4 py-2">📊 Dashboard</button>
     </div>
   </nav>
 
   <!-- Hero Section -->
   <header class="hero">
     <h1 class="gradient-title floating">
-      Kuasai Ilmu<br>
-      <span class="text-3xl md:text-5xl font-bold text-white">dengan Cara Futuristik</span>
+      BELAJAR DENGAN<br>
+      <span class="text-3xl md:text-5xl font-bold text-white">MENARIK DAN MENYENANGKAN</span>
     </h1>
     <p class="text-xl md:text-2xl">
-      Platform quiz sci-fi interaktif: <strong>user biasa bisa langsung main</strong>,<br>
-      <strong>guru/pembuat soal bisa login</strong> untuk kelola materi, analisis, dan edit soal.
+      Platform quiz interaktif yang mengubah belajar menjadi menarik dan menyenangkan
+      <strong style="color: #00f7ff;">Buat, Mainkan, dan Analisis </strong>pencapaian pemahaman materi
     </p>
   </header>
 
@@ -496,8 +549,8 @@
         <!-- User Path -->
         <div class="cta-card">
           <div class="badge badge-user">UNTUK SEMUA ORANG</div>
-          <h3 class="text-2xl font-bold mb-4">🧑 Main Quiz Sekarang</h3>
-          <p class="mb-5">Tidak perlu daftar. Pilih quiz yang tersedia dan mulai belajar!</p>
+          <h3 class="text-2xl font-bold mb-4">🧑‍🎓 Main Quiz Sekarang</h3>
+          <p class="mb-5">Tidak perlu daftar. Pilih quiz yang tersedia dan mulai petualangan ilmumu!</p>
           <button onclick="showQuizSelectionModal()" class="btn btn-primary w-full">🎮 Pilih & Main Quiz</button>
         </div>
 
@@ -505,25 +558,39 @@
         <div class="cta-card">
           <div class="badge badge-creator">UNTUK GURU / PEMBUAT SOAL</div>
           <h3 class="text-2xl font-bold mb-4">🛠️ Buat & Kelola Quiz</h3>
-          <p class="mb-5">Buat akun, kelola soal, analisis hasil, dan edit kapan saja.</p>
+          <p class="mb-5">Buat akun, rancang quiz futuristik, analisis hasil, dan kembangkan metode pembelajaranmu.</p>
           <button onclick="startAsCreator()" class="btn btn-creator w-full">🔐 Login / Daftar</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Preview -->
+  <!-- ALUR -->
   <section>
-    <h2 class="section-title gradient-title">Coba Langsung — Tanpa Login!</h2>
-    <div class="preview-quiz">
-      <div class="preview-question" id="previewQ">Apa ibukota Indonesia?</div>
-      <div id="previewAnswers">
-        <div class="preview-answer" data-correct="false">Surabaya</div>
-        <div class="preview-answer" data-correct="false">Bandung</div>
-        <div class="preview-answer" data-correct="true">Jakarta</div>
-        <div class="preview-answer" data-correct="false">Medan</div>
-      </div>
-      <div class="preview-feedback" id="previewFeedback"></div>
+    <h2 class="section-title gradient-title">🔄 Alur Penggunaan EduVerse</h2>
+    <div class="max-w-4xl mx-auto">
+      <ol class="relative border-l-4 border-cyan-400 ml-4">
+        <li class="mb-10 ml-6">
+          <span class="absolute flex items-center justify-center w-8 h-8 bg-cyan-500 rounded-full -left-5 ring-4 ring-cyan-200 text-white font-bold">1</span>
+          <h3 class="font-bold text-lg mb-1">Pilih Peran</h3>
+          <p class="text-gray-300">Sebagai <b>Pengguna</b> (langsung main quiz) atau <b>Pembuat Soal</b> (login/daftar untuk kelola quiz).</p>
+        </li>
+        <li class="mb-10 ml-6">
+          <span class="absolute flex items-center justify-center w-8 h-8 bg-pink-500 rounded-full -left-5 ring-4 ring-pink-200 text-white font-bold">2</span>
+          <h3 class="font-bold text-lg mb-1">Akses Quiz</h3>
+          <p class="text-gray-300">Pilih quiz yang tersedia untuk dikerjakan, atau buat quiz baru jika Anda pembuat soal.</p>
+        </li>
+        <li class="mb-10 ml-6">
+          <span class="absolute flex items-center justify-center w-8 h-8 bg-purple-500 rounded-full -left-5 ring-4 ring-purple-200 text-white font-bold">3</span>
+          <h3 class="font-bold text-lg mb-1">Kerjakan & Analisis</h3>
+          <p class="text-gray-300">Kerjakan quiz, dapatkan skor, dan lihat analisis hasil belajar secara langsung.</p>
+        </li>
+        <li class="ml-6">
+          <span class="absolute flex items-center justify-center w-8 h-8 bg-green-500 rounded-full -left-5 ring-4 ring-green-200 text-white font-bold">4</span>
+          <h3 class="font-bold text-lg mb-1">Kembangkan</h3>
+          <p class="text-gray-300">Pembuat soal bisa memperbarui quiz & melihat statistik untuk meningkatkan pembelajaran.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -542,60 +609,48 @@
     </div>
   </section>
 
-  <!-- History Section -->
-  <section class="bg-black/10">
-    <h2 class="section-title gradient-title">📜 Riwayat Quiz Anda</h2>
-    <div class="quiz-list">
-      <div id="historyList">
-        <!-- Will be populated by JavaScript -->
-        <div class="empty-state">
-          <h3>📅 Belum Ada Riwayat</h3>
-          <p>Anda belum mengerjakan quiz apapun. Pilih quiz dari daftar di atas untuk memulai!</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Features -->
   <section>
-    <h2 class="section-title gradient-title">Fitur Lengkap untuk Semua</h2>
-    <div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 3rem auto; max-width: 1200px;">
-      <div class="feature-item">
-        <div class="feature-icon">🚀</div>
-        <h3 class="text-xl font-bold mb-2">Tanpa Login</h3>
-        <p>User biasa bisa langsung main quiz tanpa registrasi.</p>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">💾</div>
-        <h3 class="text-xl font-bold mb-2">LocalStorage</h3>
-        <p>Data disimpan di browser Anda — aman & privat.</p>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">📊</div>
-        <h3 class="text-xl font-bold mb-2">Analisis Pemahaman</h3>
-        <p>Admin bisa lihat statistik dan rekomendasi perbaikan.</p>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">✏️</div>
-        <h3 class="text-xl font-bold mb-2">Edit & Update</h3>
-        <p>Pembuat soal bisa mengedit kapan saja jika ada kesalahan.</p>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">🔊</div>
-        <h3 class="text-xl font-bold mb-2">Sound Effect</h3>
-        <p>Audio feedback saat jawaban benar/salah.</p>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">🪐</div>
-        <h3 class="text-xl font-bold mb-2">Tema Sci-Fi</h3>
-        <p>Desain futuristik dengan animasi partikel dan efek glow.</p>
+    <h2 class="section-title gradient-title">🌟 Fitur Lengkap untuk Semua</h2>
+    <div class="features-container">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Petualangan Tanpa Batas</h3>
+          <p class="feature-desc">Jelajahi berbagai materi pelajaran dalam format quiz interaktif yang seru dan menantang.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3 class="feature-title">Desain Futuristik</h3>
+          <p class="feature-desc">Pengalaman belajar dengan visual sci-fi, animasi partikel, dan efek glow yang memukau.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Analisis Mendalam</h3>
+          <p class="feature-desc">Dapatkan insight tentang pemahaman siswa dan rekomendasi perbaikan pembelajaran.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛠️</div>
+          <h3 class="feature-title">Buat Quiz Kreatif</h3>
+          <p class="feature-desc">Rancang quiz dengan berbagai tipe soal, poin, dan analisis performa siswa.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-title">Akses Dimana Saja</h3>
+          <p class="feature-desc">Kompatibel di semua perangkat — HP, tablet, laptop — tanpa perlu instalasi.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">Privasi Terjamin</h3>
+          <p class="feature-desc">Semua data disimpan lokal di browser Anda — aman, privat, tanpa server eksternal.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Final CTA -->
   <section class="text-center py-20 bg-gradient-to-b from-transparent to-gray-900/50">
-    <h2 class="text-4xl md:text-5xl font-bold gradient-title mb-6">Pilih Jalurmu — Mulai Sekarang!</h2>
+    <h2 class="text-4xl md:text-5xl font-bold gradient-title mb-6">Mulai Petualangan Ilmumu Sekarang!</h2>
     <p class="text-xl mb-10 text-gray-300 max-w-2xl mx-auto">EduVerse dirancang untuk semua: pembelajar santai dan pembuat konten edukasi profesional.</p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <button onclick="showQuizSelectionModal()" class="btn btn-primary text-lg px-8 py-4">🧑‍🎓 Pilih Quiz & Main</button>
@@ -654,25 +709,6 @@
       background.appendChild(star);
     }
 
-    // ========== INTERACTIVE PREVIEW QUIZ ==========
-    document.querySelectorAll('.preview-answer').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const feedback = document.getElementById('previewFeedback');
-        if (this.dataset.correct === 'true') {
-          feedback.textContent = '✅ Benar! Hebat sekali!';
-          feedback.className = 'preview-feedback feedback-correct';
-        } else {
-          feedback.textContent = '❌ Belum tepat. Coba lagi ya!';
-          feedback.className = 'preview-feedback feedback-wrong';
-        }
-        feedback.style.display = 'block';
-        
-        setTimeout(() => {
-          feedback.style.display = 'none';
-        }, 2500);
-      });
-    });
-
     // ========== NAVIGATION & MODAL ==========
     function closeModal(modalId) {
       const modal = document.getElementById(modalId);
@@ -681,6 +717,15 @@
 
     function showInfoModal() {
       document.getElementById('infoModal').classList.add('active');
+    }
+
+    function goToDashboard() {
+      const currentUser = localStorage.getItem('currentUser');
+      if (currentUser) {
+        window.location.href = 'dashboard.html';
+      } else {
+        showLoginModal();
+      }
     }
 
     function startAsCreator() {
@@ -733,54 +778,6 @@
             <p>${quiz.questions.length} soal • Dibuat oleh: ${quiz.creator}</p>
           </div>
           <button onclick="startQuiz('${quiz.id}')" class="btn btn-primary text-sm">Mainkan</button>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    // ========== RENDER HISTORY ==========
-    function renderHistory() {
-      const history = JSON.parse(localStorage.getItem('userQuizHistory') || '[]');
-      const container = document.getElementById('historyList');
-      
-      if (history.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <h3>📅 Belum Ada Riwayat</h3>
-            <p>Anda belum mengerjakan quiz apapun. Pilih quiz dari daftar di atas untuk memulai!</p>
-          </div>
-        `;
-        return;
-      }
-      
-      container.innerHTML = '';
-      
-      // Sort by date (newest first)
-      history.sort((a, b) => new Date(b.date) - new Date(a.date));
-      
-      history.slice(0, 10).forEach(record => {
-        const item = document.createElement('div');
-        item.className = 'history-item';
-        
-        // Find quiz title
-        let quizTitle = record.quizId;
-        const allQuizzes = loadAllQuizzes();
-        const foundQuiz = allQuizzes.find(q => q.id === record.quizId);
-        if (foundQuiz) {
-          quizTitle = foundQuiz.title;
-        }
-        
-        const percentage = Math.round((record.score / record.maxScore) * 100);
-        const isGood = percentage >= 70;
-        
-        item.innerHTML = `
-          <div>
-            <div class="font-bold">${quizTitle}</div>
-            <div class="text-sm">${new Date(record.date).toLocaleDateString('id-ID')}</div>
-          </div>
-          <div class="history-score ${isGood ? '' : 'history-low'}">
-            ${record.score} poin (${percentage}%)
-          </div>
         `;
         container.appendChild(item);
       });
@@ -981,7 +978,6 @@
     // ========== INIT ==========
     window.addEventListener('load', function() {
       renderAvailableQuizzes();
-      renderHistory();
     });
   </script>
 </body>

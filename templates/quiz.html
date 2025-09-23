@@ -275,9 +275,10 @@
   <!-- Header -->
   <header>
     <div class="nav-brand">🚀 EduVerse Quiz</div>
-    <div>
+    <div style="display: flex; align-items: center; gap: 1.5rem; padding: 0 10px;">
       <span id="timer" class="text-lg font-mono">00:00</span>
     </div>
+    <a href="index.html" style="border: 1px solid #e0e0ff; padding: 8px 12px; border-radius: 50px;"> ⬅ Halaman Awal</a>
   </header>
 
   <!-- Quiz Container -->
@@ -286,6 +287,16 @@
       <!-- Quiz Content will be rendered here -->
     </div>
   </main>
+
+  <!-- Audio Elements -->
+  <audio id="audioCorrect" preload="auto">
+    <source src="../assets/jawaban-benar.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <audio id="audioWrong" preload="auto">
+    <source src="../assets/jawaban-salah.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
   <script>
     // ========== BACKGROUND STARS ==========
@@ -299,6 +310,30 @@
       star.style.left = `${Math.random() * 100}%`;
       star.style.animationDelay = `${Math.random() * 5}s`;
       background.appendChild(star);
+    }
+
+    // ========== AUDIO ELEMENTS ==========
+    const audioCorrect = document.getElementById('audioCorrect');
+    const audioWrong = document.getElementById('audioWrong');
+
+    // Function to play sound
+    function playSound(isCorrect) {
+      // Stop any currently playing audio
+      audioCorrect.pause();
+      audioWrong.pause();
+      audioCorrect.currentTime = 0;
+      audioWrong.currentTime = 0;
+      
+      // Play the appropriate sound
+      if (isCorrect) {
+        audioCorrect.play().catch(e => {
+          console.log("Audio playback was prevented:", e);
+        });
+      } else {
+        audioWrong.play().catch(e => {
+          console.log("Audio playback was prevented:", e);
+        });
+      }
     }
 
     // ========== STATE ==========
@@ -396,6 +431,9 @@
       const question = currentQuiz.questions[currentQuestionIndex];
       const isCorrect = selectedIndex === question.correct;
       const timeSpent = Math.floor((new Date() - questionStartTime) / 1000);
+      
+      // Play sound based on answer
+      playSound(isCorrect);
       
       // Record answer
       answers.push({
