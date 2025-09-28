@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EduVerse — Platform Quiz Sci-Fi Interaktif</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #00f7ff;
       --secondary: #ff2a6d;
+      --accent: #7b2cbf;
       --dark: #050a1a;
       --darker: #02050d;
+      --card-bg: rgba(15, 25, 55, 0.7);
     }
 
     * {
@@ -28,8 +31,12 @@
       line-height: 1.6;
     }
 
-    /* Background Universe */
-    #background {
+    h1, h2, h3, h4 {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Background Effects */
+    .bg-universe {
       position: fixed;
       top: 0;
       left: 0;
@@ -40,70 +47,187 @@
       overflow: hidden;
     }
 
-    .nebula {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,247,255,0.15) 0%, transparent 70%);
-      filter: blur(80px);
-      animation: float 25s infinite ease-in-out;
-    }
-
-    .nebula:nth-child(2) {
-      background: radial-gradient(circle, rgba(255,42,109,0.1) 0%, transparent 70%);
-      left: 60%;
-      top: 20%;
-      animation-delay: -10s;
-    }
-
-    .star {
-      position: absolute;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 4s infinite ease-in-out;
-    }
-
-    .planet {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #ff2a6d, #a00037);
-      box-shadow: 0 0 60px rgba(255,42,109,0.4);
-      animation: orbit 45s linear infinite;
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 247, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 255, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
       z-index: -2;
+      opacity: 0.3;
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.15;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--primary);
+      top: 10%;
+      left: 5%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--secondary);
+      bottom: 10%;
+      right: 5%;
+      animation: float 25s infinite ease-in-out reverse;
+    }
+
+    .shape-3 {
+      width: 200px;
+      height: 200px;
+      background: var(--accent);
+      top: 50%;
+      left: 80%;
+      animation: float 15s infinite ease-in-out;
     }
 
     @keyframes float {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(30px, -30px); }
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(120deg); }
+      66% { transform: translate(-20px, 20px) rotate(240deg); }
     }
 
-    @keyframes orbit {
-      0% { transform: rotate(0deg) translateX(300px) rotate(0deg); }
-      100% { transform: rotate(360deg) translateX(300px) rotate(-360deg); }
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      background: rgba(5, 10, 26, 0.8);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.2);
     }
 
-    /* Typography */
-    h1, h2, h3 {
-      font-family: 'Orbitron', sans-serif;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--primary);
     }
 
-    .glow-text {
-      text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px #00a3aa;
+    .logo-icon {
+      font-size: 1.8rem;
+      animation: pulse 2s infinite;
     }
 
-    .gradient-title {
-      background: linear-gradient(to right, var(--primary), var(--secondary), var(--primary));
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: #e0e0ff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-link:hover:before {
+      left: 100%;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+      box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 1.5rem;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2.5rem;
+      color: #b0b0ff;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     /* Buttons */
@@ -115,9 +239,19 @@
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
       overflow: hidden;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Orbitron', sans-serif;
       letter-spacing: 1px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      gap: 0.75rem;
+    }
+
+    .btn:focus {
+      box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.5);
     }
 
     .btn-primary {
@@ -131,6 +265,17 @@
       box-shadow: 0 10px 30px rgba(0, 247, 255, 0.6);
     }
 
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--secondary), #a00037);
+      color: white;
+      box-shadow: 0 5px 20px rgba(255, 42, 109, 0.4);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 42, 109, 0.6);
+    }
+
     .btn-outline {
       background: transparent;
       color: var(--primary);
@@ -142,94 +287,102 @@
       box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
     }
 
-    .btn-creator {
-      background: linear-gradient(135deg, #a00037, #ff2a6d);
-      color: white;
-    }
-
-    .btn-creator:hover {
-      box-shadow: 0 10px 30px rgba(255, 42, 109, 0.6);
-    }
-
-    .btn-dashboard {
-      background: linear-gradient(135deg, #7b2cbf, #5a189a);
-      color: white;
-    }
-
-    .btn-dashboard:hover {
-      box-shadow: 0 10px 30px rgba(123, 44, 191, 0.6);
-    }
-
-    /* Hero Section */
-    .hero {
-      position: relative;
-      padding: 140px 20px 80px;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .hero h1 {
-        font-size: 5rem;
-      }
-    }
-
-    .hero p {
-      max-width: 700px;
-      margin: 0 auto 3rem;
-      font-size: 1.25rem;
-      color: #ccc;
-    }
-
-    /* Floating Elements */
-    .floating {
-      animation: floating 6s ease-in-out infinite;
-    }
-
-    @keyframes floating {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0px); }
-    }
-
-    /* Dual CTA Section */
-    .cta-section {
-      background: rgba(10, 20, 40, 0.6);
+    /* Cards */
+    .card {
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
-      border-radius: 30px;
-      padding: 3rem;
-      border: 2px solid rgba(0, 247, 255, 0.3);
-      max-width: 900px;
-      margin: 0 auto 4rem;
-    }
-
-    .cta-card {
-      background: rgba(20, 30, 60, 0.4);
       border-radius: 20px;
       padding: 2rem;
       border: 1px solid rgba(255, 255, 255, 0.1);
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .cta-card:hover {
+    .card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover:before {
+      opacity: 1;
+    }
+
+    .card:hover {
       transform: translateY(-10px);
       border-color: var(--primary);
       box-shadow: 0 15px 30px rgba(0, 247, 255, 0.2);
     }
 
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: bold;
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
       margin-bottom: 1rem;
+      color: white;
+    }
+
+    .card-text {
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    /* Sections */
+    .section {
+      padding: 6rem 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+      color: white;
+    }
+
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      margin: 1rem auto;
+      border-radius: 2px;
+    }
+
+    /* Path Selection */
+    .path-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .path-card {
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .path-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
     }
 
     .badge-user {
@@ -242,25 +395,29 @@
       color: var(--secondary);
     }
 
-    /* Available Quizzes Section */
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Quiz List */
     .quiz-list {
-      background: rgba(15, 25, 55, 0.4);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 2rem;
-      border: 1px solid rgba(0, 247, 255, 0.2);
-      margin: 4rem auto;
       max-width: 1000px;
+      margin: 0 auto;
     }
 
     .quiz-item {
-      background: rgba(30, 40, 70, 0.4);
-      padding: 1.5rem;
-      border-radius: 15px;
-      margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 15px;
+      background: rgba(30, 40, 70, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.05);
       transition: all 0.3s ease;
     }
@@ -271,7 +428,7 @@
     }
 
     .quiz-info h3 {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       margin-bottom: 0.5rem;
     }
 
@@ -280,53 +437,64 @@
       color: #aaa;
     }
 
-    /* Features Section */
-    .features-container {
-      background: rgba(15, 25, 55, 0.4);
-      backdrop-filter: blur(10px);
-      border-radius: 30px;
-      padding: 3rem;
-      border: 2px solid rgba(0, 247, 255, 0.3);
-      margin: 4rem auto;
-      max-width: 1200px;
-    }
-
-    .feature-card {
-      background: rgba(30, 40, 70, 0.4);
-      border-radius: 20px;
-      padding: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s ease;
-      text-align: center;
-      height: 100%;
+    /* Process Steps */
+    .process-steps {
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
     }
 
-    .feature-card:hover {
-      transform: translateY(-10px);
-      border-color: var(--primary);
-      box-shadow: 0 15px 30px rgba(0, 247, 255, 0.2);
+    .process-steps:before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      z-index: 0;
     }
 
-    .feature-icon {
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
+    .step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .step-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.8rem;
+      background: var(--card-bg);
+      border: 2px solid var(--primary);
       color: var(--primary);
     }
 
-    .feature-title {
-      font-size: 1.5rem;
+    .step-title {
+      font-size: 1.2rem;
       font-weight: 700;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       color: white;
     }
 
-    .feature-desc {
-      font-size: 1rem;
+    .step-text {
       color: #ccc;
-      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     /* Modal */
@@ -372,6 +540,14 @@
       border-radius: 50%;
       font-size: 1.2rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-modal:hover {
+      background: #444;
+      color: #fff;
     }
 
     .empty-state {
@@ -391,277 +567,306 @@
       font-size: 1.1rem;
     }
 
-    /* Navigation */
-    nav {
-      padding: 1.5rem 2rem;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-      background: rgba(5, 10, 26, 0.7);
-      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
-    }
-
-    .nav-brand {
-      font-size: 1.5rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      color: var(--primary);
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 1rem;
-    }
-
-    /* Sections */
-    section {
-      padding: 80px 20px;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-      position: relative;
-    }
-
-    .section-title:after {
-      content: '';
-      display: block;
-      width: 100px;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      margin: 1rem auto;
-      border-radius: 2px;
-    }
-
-    /* Footer */
-    footer {
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
     /* Responsive Adjustments */
     @media (max-width: 768px) {
-      .hero {
-        padding: 100px 20px 60px;
-      }
-      
-      .hero h1 {
+      .hero-title {
         font-size: 2.5rem;
       }
       
-      .hero p {
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
+      .hero-subtitle {
+        font-size: 1.2rem;
       }
       
-      .cta-section {
-        padding: 2rem 1.5rem;
-        margin-bottom: 3rem;
+      .nav-links {
+        display: none;
       }
       
-      .features-container {
-        padding: 2rem 1.5rem;
-        margin: 3rem auto;
+      .mobile-menu-btn {
+        display: block;
       }
       
-      .feature-card {
-        padding: 1.5rem;
+      .process-steps {
+        flex-direction: column;
+        gap: 2rem;
       }
       
-      section {
-        padding: 60px 20px;
+      .process-steps:before {
+        display: none;
+      }
+      
+      .section {
+        padding: 4rem 1.5rem;
       }
       
       .section-title {
         font-size: 2rem;
-        margin-bottom: 2rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .quiz-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .modal-content {
+        padding: 1.5rem;
       }
     }
 
     @media (max-width: 480px) {
+      .navbar {
+        padding: 1rem;
+      }
+      
+      .logo {
+        font-size: 1.2rem;
+      }
+      
       .hero {
-        padding: 80px 20px 40px;
+        padding-top: 4rem;
       }
       
-      .hero h1 {
-        font-size: 2rem;
+      .path-selection {
+        grid-template-columns: 1fr;
       }
-      
-      .btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
-      }
-      
-      .nav-buttons {
-        gap: 0.5rem;
-      }
-      
-      .nav-buttons .btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(5, 10, 26, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00a3aa;
     }
   </style>
 </head>
 <body class="min-h-screen">
 
-  <!-- Background Universe -->
-  <div id="background"></div>
-  <div class="nebula"></div>
-  <div class="nebula"></div>
-  <div class="planet" style="top: 30%; left: 15%;"></div>
-  <div class="planet" style="top: 60%; left: 80%; animation-duration: 60s; background: radial-gradient(circle at 30% 30%, #00f7ff, #0077aa);"></div>
+  <!-- Background Effects -->
+  <div class="bg-universe"></div>
+  <div class="grid-bg"></div>
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
 
   <!-- Navigation -->
-  <nav>
-    <div class="nav-brand">🚀</div>
-    <div class="nav-buttons">
-      <button onclick="showInfoModal()" class="btn btn-outline text-sm px-4 py-2">ℹ️ Info Fitur</button>
-      <button onclick="goToDashboard()" class="btn btn-dashboard text-sm px-4 py-2">📊 Dashboard</button>
+  <nav class="navbar">
+    <div class="logo">
+      <i class="logo-icon fas fa-rocket"></i>
+      <span>EduVerse</span>
     </div>
+    <div class="nav-links">
+      <a href="#" class="nav-link" onclick="showInfoModal()">Info Fitur</a>
+      <a href="#" class="nav-link" onclick="goToDashboard()">Dashboard</a>
+      <a href="#" class="nav-link" onclick="showQuizSelectionModal()">Quiz Tersedia</a>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
   </nav>
 
   <!-- Hero Section -->
-  <header class="hero">
-    <h1 class="gradient-title floating">
-      BELAJAR DENGAN<br>
-      <span class="text-3xl md:text-5xl font-bold text-white">MENARIK DAN MENYENANGKAN</span>
-    </h1>
-    <p class="text-xl md:text-2xl">
-      Platform quiz interaktif yang mengubah belajar menjadi menarik dan menyenangkan
-      <strong style="color: #00f7ff;">Buat, Mainkan, dan Analisis </strong>pencapaian pemahaman materi
-    </p>
-  </header>
-
-  <!-- Dual Path CTA -->
-  <section>
-    <div class="cta-section">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- User Path -->
-        <div class="cta-card">
-          <div class="badge badge-user">UNTUK SEMUA ORANG</div>
-          <h3 class="text-2xl font-bold mb-4">🧑‍🎓 Main Quiz Sekarang</h3>
-          <p class="mb-5">Tidak perlu daftar. Pilih quiz yang tersedia dan mulai petualangan ilmumu!</p>
-          <button onclick="showQuizSelectionModal()" class="btn btn-primary w-full">🎮 Pilih & Main Quiz</button>
-        </div>
-
-        <!-- Creator Path -->
-        <div class="cta-card">
-          <div class="badge badge-creator">UNTUK GURU / PEMBUAT SOAL</div>
-          <h3 class="text-2xl font-bold mb-4">🛠️ Buat & Kelola Quiz</h3>
-          <p class="mb-5">Buat akun, rancang quiz futuristik, analisis hasil, dan kembangkan metode pembelajaranmu.</p>
-          <button onclick="startAsCreator()" class="btn btn-creator w-full">🔐 Login / Daftar</button>
-        </div>
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">EduVerse</h1>
+      <p class="hero-subtitle">Platform Quiz Interaktif untuk Mengukur Pemahaman Materi</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="showQuizSelectionModal()">
+          <i class="fas fa-gamepad"></i>
+          Main Quiz Sekarang
+        </button>
+        <button class="btn btn-secondary" onclick="startAsCreator()">
+          <i class="fas fa-tools"></i>
+          Mode Pembuat Soal
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- ALUR -->
-  <section>
-    <h2 class="section-title gradient-title">🔄 Alur Penggunaan EduVerse</h2>
-    <div class="max-w-4xl mx-auto">
-      <ol class="relative border-l-4 border-cyan-400 ml-4">
-        <li class="mb-10 ml-6">
-          <span class="absolute flex items-center justify-center w-8 h-8 bg-cyan-500 rounded-full -left-5 ring-4 ring-cyan-200 text-white font-bold">1</span>
-          <h3 class="font-bold text-lg mb-1">Pilih Peran</h3>
-          <p class="text-gray-300">Sebagai <b>Pengguna</b> (langsung main quiz) atau <b>Pembuat Soal</b> (login/daftar untuk kelola quiz).</p>
-        </li>
-        <li class="mb-10 ml-6">
-          <span class="absolute flex items-center justify-center w-8 h-8 bg-pink-500 rounded-full -left-5 ring-4 ring-pink-200 text-white font-bold">2</span>
-          <h3 class="font-bold text-lg mb-1">Akses Quiz</h3>
-          <p class="text-gray-300">Pilih quiz yang tersedia untuk dikerjakan, atau buat quiz baru jika Anda pembuat soal.</p>
-        </li>
-        <li class="mb-10 ml-6">
-          <span class="absolute flex items-center justify-center w-8 h-8 bg-purple-500 rounded-full -left-5 ring-4 ring-purple-200 text-white font-bold">3</span>
-          <h3 class="font-bold text-lg mb-1">Kerjakan & Analisis</h3>
-          <p class="text-gray-300">Kerjakan quiz, dapatkan skor, dan lihat analisis hasil belajar secara langsung.</p>
-        </li>
-        <li class="ml-6">
-          <span class="absolute flex items-center justify-center w-8 h-8 bg-green-500 rounded-full -left-5 ring-4 ring-green-200 text-white font-bold">4</span>
-          <h3 class="font-bold text-lg mb-1">Kembangkan</h3>
-          <p class="text-gray-300">Pembuat soal bisa memperbarui quiz & melihat statistik untuk meningkatkan pembelajaran.</p>
-        </li>
-      </ol>
+  <!-- Path Selection -->
+  <section class="section">
+    <h2 class="section-title">Pilih Jalur Pembelajaran</h2>
+    <div class="path-selection">
+      <!-- User Path -->
+      <div class="card path-card">
+        <div class="path-badge badge-user">UNTUK SEMUA ORANG</div>
+        <div class="card-icon">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <h3 class="card-title">Main Quiz Sekarang</h3>
+        <p class="card-text">Tidak perlu daftar. Pilih quiz yang tersedia dan mulai petualanganmu!</p>
+        <button class="btn btn-primary mt-6" onclick="showQuizSelectionModal()">
+          <i class="fas fa-play"></i>
+          Mulai Main
+        </button>
+      </div>
+
+      <!-- Creator Path -->
+      <div class="card path-card">
+        <div class="path-badge badge-creator">PEMBUAT SOAL</div>
+        <div class="card-icon">
+          <i class="fas fa-tools"></i>
+        </div>
+        <h3 class="card-title">Buat & Kelola Quiz</h3>
+        <p class="card-text">Buat akun, rancang quiz, analisis hasil, dan kelola konten pembelajaran.</p>
+        <button class="btn btn-secondary mt-6" onclick="startAsCreator()">
+          <i class="fas fa-user-lock"></i>
+          Login / Daftar
+        </button>
+      </div>
     </div>
   </section>
 
-  <!-- Available Quizzes Section -->
-  <section>
-    <h2 class="section-title gradient-title">📚 Quiz Tersedia</h2>
+  <!-- Process Steps -->
+  <section class="section">
+    <h2 class="section-title">Alur Penggunaan EduVerse</h2>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <h3 class="step-title">Pilih Peran</h3>
+        <p class="step-text">Sebagai Pengguna atau Pembuat Soal</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <i class="fas fa-list"></i>
+        </div>
+        <h3 class="step-title">Akses Quiz</h3>
+        <p class="step-text">Pilih atau buat quiz sesuai kebutuhan</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <i class="fas fa-tasks"></i>
+        </div>
+        <h3 class="step-title">Kerjakan & Analisis</h3>
+        <p class="step-text">Kerjakan quiz dan lihat hasil analisis</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="step-title">Kembangkan</h3>
+        <p class="step-text">Tingkatkan pembelajaran berdasarkan hasil</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Available Quizzes -->
+  <section class="section">
+    <h2 class="section-title">Quiz Tersedia</h2>
     <div class="quiz-list">
       <div id="availableQuizzes">
         <!-- Will be populated by JavaScript -->
         <div class="empty-state">
-          <h3>📭 Tidak Ada Quiz Tersedia</h3>
+          <h3><i class="fas fa-inbox"></i> Tidak Ada Quiz Tersedia</h3>
           <p>Belum ada quiz yang dibuat oleh admin. Silakan coba lagi nanti atau ajak guru Anda untuk membuat quiz!</p>
-          <button onclick="startAsCreator()" class="btn btn-creator">🛠️ Buat Quiz Sekarang</button>
+          <button class="btn btn-secondary mt-4" onclick="startAsCreator()">
+            <i class="fas fa-tools"></i>
+            Buat Quiz Sekarang
+          </button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Features -->
-  <section>
-    <h2 class="section-title gradient-title">🌟 Fitur Lengkap untuk Semua</h2>
-    <div class="features-container">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <h3 class="feature-title">Petualangan Tanpa Batas</h3>
-          <p class="feature-desc">Jelajahi berbagai materi pelajaran dalam format quiz interaktif yang seru dan menantang.</p>
+  <section class="section">
+    <h2 class="section-title">Fitur Lengkap untuk Semua</h2>
+    <div class="features-grid">
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-rocket"></i>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎨</div>
-          <h3 class="feature-title">Desain Futuristik</h3>
-          <p class="feature-desc">Pengalaman belajar dengan visual sci-fi, animasi partikel, dan efek glow yang memukau.</p>
+        <h3 class="card-title">Petualangan Tanpa Batas</h3>
+        <p class="card-text">Jelajahi berbagai materi pelajaran dalam format quiz interaktif yang seru dan menantang.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-palette"></i>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3 class="feature-title">Analisis Mendalam</h3>
-          <p class="feature-desc">Dapatkan insight tentang pemahaman siswa dan rekomendasi perbaikan pembelajaran.</p>
+        <h3 class="card-title">Desain Futuristik</h3>
+        <p class="card-text">Pengalaman belajar dengan visual menarik, dan efek glow yang memukau.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-chart-bar"></i>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🛠️</div>
-          <h3 class="feature-title">Buat Quiz Kreatif</h3>
-          <p class="feature-desc">Rancang quiz dengan berbagai tipe soal, poin, dan analisis performa siswa.</p>
+        <h3 class="card-title">Analisis Mendalam</h3>
+        <p class="card-text">Dapatkan insight tentang pemahaman siswa dan rekomendasi perbaikan pembelajaran.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-tools"></i>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🌐</div>
-          <h3 class="feature-title">Akses Dimana Saja</h3>
-          <p class="feature-desc">Kompatibel di semua perangkat — HP, tablet, laptop — tanpa perlu instalasi.</p>
+        <h3 class="card-title">Buat Quiz Kreatif</h3>
+        <p class="card-text">Rancang quiz dengan berbagai tipe soal, poin, dan analisis performa siswa.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-globe"></i>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔒</div>
-          <h3 class="feature-title">Privasi Terjamin</h3>
-          <p class="feature-desc">Semua data disimpan lokal di browser Anda — aman, privat, tanpa server eksternal.</p>
+        <h3 class="card-title">Akses Dimana Saja</h3>
+        <p class="card-text">Kompatibel di semua perangkat — HP, tablet, laptop — tanpa perlu instalasi.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-shield-alt"></i>
         </div>
+        <h3 class="card-title">Privasi Terjamin</h3>
+        <p class="card-text">Semua data disimpan lokal di browser Anda — aman, privat, tanpa server eksternal.</p>
       </div>
     </div>
   </section>
 
   <!-- Final CTA -->
-  <section class="text-center py-20 bg-gradient-to-b from-transparent to-gray-900/50">
-    <h2 class="text-4xl md:text-5xl font-bold gradient-title mb-6">Mulai Petualangan Ilmumu Sekarang!</h2>
+  <section class="section text-center">
+    <h2 class="section-title">Mulai Petualangan Ilmumu Sekarang!</h2>
     <p class="text-xl mb-10 text-gray-300 max-w-2xl mx-auto">EduVerse dirancang untuk semua: pembelajar santai dan pembuat konten edukasi profesional.</p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <button onclick="showQuizSelectionModal()" class="btn btn-primary text-lg px-8 py-4">🧑‍🎓 Pilih Quiz & Main</button>
-      <button onclick="startAsCreator()" class="btn btn-creator text-lg px-8 py-4">🛠️ Kelola Quiz (Login)</button>
+      <button class="btn btn-primary text-lg px-8 py-4" onclick="showQuizSelectionModal()">
+        <i class="fas fa-user-graduate"></i>
+        Pilih Quiz & Main
+      </button>
+      <button class="btn btn-secondary text-lg px-8 py-4" onclick="startAsCreator()">
+        <i class="fas fa-tools"></i>
+        Kelola Quiz (Login)
+      </button>
     </div>
     <p class="mt-6 text-sm text-gray-400">Kompatibel di semua perangkat — HP, tablet, laptop.</p>
   </section>
 
   <!-- Footer -->
-  <footer>
-    <p class="text-gray-400">© 2025 EduVerse — Platform Quiz Sci-Fi Interaktif</p>
+  <footer class="footer">
+    <p class="text-gray-400">© 2025 EduVerse — Platform Quiz Interaktif</p>
     <p class="text-sm mt-2">Data disimpan lokal di browser Anda. Tidak ada server eksternal.</p>
   </footer>
 
@@ -669,16 +874,34 @@
   <div id="infoModal" class="modal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal('infoModal')">×</button>
-      <h3 style="font-size:1.8rem; margin-bottom:1.5rem; color:#00f7ff;">ℹ️ Cara Kerja EduVerse</h3>
-      <ul style="text-align:left; line-height:2; font-size:1.1rem;">
-        <li>✅ <strong>User Biasa</strong>: Bisa langsung main quiz tanpa login/register.</li>
-        <li>🔐 <strong>Pembuat Soal</strong>: Harus login (nama + password) untuk membuat & kelola quiz.</li>
-        <li>💾 <strong>LocalStorage</strong>: Semua data disimpan di browser Anda — aman & privat.</li>
-        <li>📊 <strong>Analisis</strong>: Admin bisa melihat statistik pemahaman dan rekomendasi perbaikan.</li>
-        <li>✏️ <strong>Edit</strong>: Pembuat soal bisa memperbarui soal kapan saja.</li>
-        <li>🔊 <strong>Sound</strong>: Efek suara saat benar/salah.</li>
+      <h3 class="text-2xl md:text-3xl mb-6 text-cyan-400 font-orbitron"><i class="fas fa-info-circle mr-2"></i>Cara Kerja EduVerse</h3>
+      <ul class="text-left space-y-4 text-lg">
+        <li class="flex items-start">
+          <span class="text-green-400 mr-3 mt-1"><i class="fas fa-check-circle"></i></span>
+          <span><strong>User Biasa</strong>: Bisa langsung main quiz tanpa login/register.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-3 mt-1"><i class="fas fa-lock"></i></span>
+          <span><strong>Pembuat Soal</strong>: Harus login (nama + password) untuk membuat & kelola quiz.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-blue-400 mr-3 mt-1"><i class="fas fa-database"></i></span>
+          <span><strong>LocalStorage</strong>: Semua data disimpan di browser Anda — aman & privat.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-purple-400 mr-3 mt-1"><i class="fas fa-chart-pie"></i></span>
+          <span><strong>Analisis</strong>: Admin bisa melihat statistik pemahaman dan rekomendasi perbaikan.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-yellow-400 mr-3 mt-1"><i class="fas fa-edit"></i></span>
+          <span><strong>Edit</strong>: Pembuat soal bisa memperbarui soal kapan saja.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-pink-400 mr-3 mt-1"><i class="fas fa-volume-up"></i></span>
+          <span><strong>Sound</strong>: Efek suara saat benar/salah.</span>
+        </li>
       </ul>
-      <button onclick="closeModal('infoModal')" style="margin-top:2rem; padding:0.75rem 2rem; background:#333; border:1px solid #00f7ff; color:#00f7ff; border-radius:50px; cursor:pointer; font-family:'Orbitron';">Mengerti</button>
+      <button onclick="closeModal('infoModal')" class="btn btn-outline w-full mt-8">Mengerti</button>
     </div>
   </div>
 
@@ -686,7 +909,7 @@
   <div id="quizSelectionModal" class="modal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal('quizSelectionModal')">×</button>
-      <h3 style="font-size:1.8rem; margin-bottom:1.5rem; color:#00f7ff; font-family:'Orbitron';">📚 Pilih Quiz untuk Dikerjakan</h3>
+      <h3 class="text-2xl md:text-3xl mb-6 text-cyan-400 font-orbitron"><i class="fas fa-list mr-2"></i>Pilih Quiz untuk Dikerjakan</h3>
       <div id="quizSelectionList">
         <!-- Will be populated by JavaScript -->
       </div>
@@ -694,20 +917,49 @@
   </div>
 
   <script>
-    // ========== BACKGROUND UNIVERSE ==========
-    const background = document.getElementById('background');
-    const starsCount = 200;
-
-    for (let i = 0; i < starsCount; i++) {
-      const star = document.createElement('div');
-      star.classList.add('star');
-      star.style.width = `${Math.random() * 2 + 1}px`;
-      star.style.height = star.style.width;
-      star.style.top = `${Math.random() * 100}%`;
-      star.style.left = `${Math.random() * 100}%`;
-      star.style.animationDelay = `${Math.random() * 5}s`;
-      background.appendChild(star);
+    // ========== BACKGROUND EFFECTS ==========
+    // Create additional floating particles
+    const floatingShapes = document.querySelector('.floating-shapes');
+    for (let i = 0; i < 15; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('shape');
+      particle.style.width = `${Math.random() * 20 + 10}px`;
+      particle.style.height = particle.style.width;
+      particle.style.background = i % 3 === 0 ? 'var(--primary)' : i % 3 === 1 ? 'var(--secondary)' : 'var(--accent)';
+      particle.style.top = `${Math.random() * 100}%`;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.animation = `float ${Math.random() * 20 + 10}s infinite ease-in-out`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      floatingShapes.appendChild(particle);
     }
+
+    // ========== MOBILE NAVIGATION ==========
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.querySelector('.nav-links');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+      if (navLinks.style.display === 'flex') {
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.position = 'absolute';
+        navLinks.style.top = '100%';
+        navLinks.style.left = '0';
+        navLinks.style.right = '0';
+        navLinks.style.background = 'rgba(5, 10, 26, 0.95)';
+        navLinks.style.backdropFilter = 'blur(10px)';
+        navLinks.style.padding = '1rem';
+        navLinks.style.borderTop = '1px solid rgba(0, 247, 255, 0.1)';
+      }
+    });
+
+    // Close mobile nav when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+        if (window.innerWidth <= 768) {
+          navLinks.style.display = 'none';
+        }
+      }
+    });
 
     // ========== NAVIGATION & MODAL ==========
     function closeModal(modalId) {
@@ -717,6 +969,9 @@
 
     function showInfoModal() {
       document.getElementById('infoModal').classList.add('active');
+      if (window.innerWidth <= 768) {
+        navLinks.style.display = 'none';
+      }
     }
 
     function goToDashboard() {
@@ -726,10 +981,16 @@
       } else {
         showLoginModal();
       }
+      if (window.innerWidth <= 768) {
+        navLinks.style.display = 'none';
+      }
     }
 
     function startAsCreator() {
       showLoginModal();
+      if (window.innerWidth <= 768) {
+        navLinks.style.display = 'none';
+      }
     }
 
     // ========== LOAD QUIZZES ==========
@@ -759,9 +1020,12 @@
       if (quizzes.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <h3>📭 Tidak Ada Quiz Tersedia</h3>
+            <h3><i class="fas fa-inbox"></i> Tidak Ada Quiz Tersedia</h3>
             <p>Belum ada quiz yang dibuat oleh admin. Silakan coba lagi nanti atau ajak guru Anda untuk membuat quiz!</p>
-            <button onclick="startAsCreator()" class="btn btn-creator">🛠️ Buat Quiz Sekarang</button>
+            <button class="btn btn-secondary mt-4" onclick="startAsCreator()">
+              <i class="fas fa-tools"></i>
+              Buat Quiz Sekarang
+            </button>
           </div>
         `;
         return;
@@ -777,7 +1041,10 @@
             <h3>${quiz.title}</h3>
             <p>${quiz.questions.length} soal • Dibuat oleh: ${quiz.creator}</p>
           </div>
-          <button onclick="startQuiz('${quiz.id}')" class="btn btn-primary text-sm">Mainkan</button>
+          <button onclick="startQuiz('${quiz.id}')" class="btn btn-primary">
+            <i class="fas fa-play"></i>
+            Mainkan
+          </button>
         `;
         container.appendChild(item);
       });
@@ -820,9 +1087,12 @@
       if (quizzes.length === 0) {
         list.innerHTML = `
           <div class="empty-state">
-            <h3>📭 Tidak Ada Quiz Tersedia</h3>
+            <h3><i class="fas fa-inbox"></i> Tidak Ada Quiz Tersedia</h3>
             <p>Belum ada quiz yang dibuat. Silakan hubungi admin atau buat quiz sendiri jika Anda admin.</p>
-            <button onclick="startAsCreator()" class="btn btn-creator mt-4">🛠️ Buat Quiz Sekarang</button>
+            <button onclick="startAsCreator()" class="btn btn-secondary mt-4">
+              <i class="fas fa-tools"></i>
+              Buat Quiz Sekarang
+            </button>
             <button onclick="closeModal('quizSelectionModal')" class="btn btn-outline mt-4">Tutup</button>
           </div>
         `;
@@ -835,7 +1105,10 @@
                   <h3>${quiz.title}</h3>
                   <p>${quiz.questions.length} soal • Dibuat oleh: ${quiz.creator}</p>
                 </div>
-                <button onclick="startQuiz('${quiz.id}')" class="btn btn-primary text-sm">Mainkan</button>
+                <button onclick="startQuiz('${quiz.id}')" class="btn btn-primary">
+                  <i class="fas fa-play"></i>
+                  Mainkan
+                </button>
               </div>
             `).join('')}
           </div>
@@ -851,19 +1124,22 @@
         <div id="loginModal" class="modal active">
           <div class="modal-content">
             <button class="close-modal" onclick="closeModal('loginModal')">×</button>
-            <h3 style="font-size:1.8rem; margin-bottom:1.5rem; color:#00f7ff; font-family:'Orbitron';">🔐 Login Admin</h3>
+            <h3 class="text-2xl md:text-3xl mb-6 text-cyan-400 font-orbitron"><i class="fas fa-lock mr-2"></i>Login Admin</h3>
             
-            <input type="text" id="loginUsername" placeholder="Username" style="width:100%; padding:1rem; margin:0.75rem 0; background:rgba(0,0,0,0.4); border:1px solid #00f7ff40; border-radius:10px; color:white; font-family:'Exo 2';" autocomplete="username">
+            <input type="text" id="loginUsername" placeholder="Username" class="w-full p-4 my-3 bg-black/40 border border-cyan-400/25 rounded-xl text-white font-exo" autocomplete="username">
             
-            <input type="password" id="loginPassword" placeholder="Password" style="width:100%; padding:1rem; margin:0.75rem 0; background:rgba(0,0,0,0.4); border:1px solid #00f7ff40; border-radius:10px; color:white; font-family:'Exo 2';" autocomplete="current-password">
+            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-4 my-3 bg-black/40 border border-cyan-400/25 rounded-xl text-white font-exo" autocomplete="current-password">
             
-            <button onclick="handleLogin()" style="width:100%; padding:1rem; margin:1.5rem 0; background:linear-gradient(135deg, #00f7ff, #00a3aa); color:#000; border:none; border-radius:50px; font-family:'Orbitron'; font-weight:bold; font-size:1.1rem; cursor:pointer; transition:all 0.2s; hover:transform:scale(1.02);">
+            <button onclick="handleLogin()" class="btn btn-primary w-full py-4 mt-6 text-lg">
+              <i class="fas fa-sign-in-alt mr-2"></i>
               Login
             </button>
             
-            <p style="font-size:0.95rem; color:#aaa; margin-top:1rem;">
+            <p class="text-gray-400 mt-4 text-center">
               Belum punya akun? 
-              <button onclick="switchToRegister()" style="color:#00f7ff; background:none; border:none; cursor:pointer; font-family:'Orbitron'; text-decoration:underline;">Daftar di sini</button>
+              <button onclick="switchToRegister()" class="text-cyan-400 bg-transparent border-none cursor-pointer font-orbitron underline ml-1">
+                Daftar di sini
+              </button>
             </p>
           </div>
         </div>
@@ -876,21 +1152,24 @@
         <div id="registerModal" class="modal active">
           <div class="modal-content">
             <button class="close-modal" onclick="closeModal('registerModal')">×</button>
-            <h3 style="font-size:1.8rem; margin-bottom:1.5rem; color:#ff2a6d; font-family:'Orbitron';">📝 Daftar Akun Baru</h3>
+            <h3 class="text-2xl md:text-3xl mb-6 text-pink-400 font-orbitron"><i class="fas fa-user-plus mr-2"></i>Daftar Akun Baru</h3>
             
-            <input type="text" id="regUsername" placeholder="Username (min 3 karakter)" style="width:100%; padding:1rem; margin:0.75rem 0; background:rgba(0,0,0,0.4); border:1px solid #ff2a6d40; border-radius:10px; color:white; font-family:'Exo 2';" autocomplete="off">
+            <input type="text" id="regUsername" placeholder="Username (min 3 karakter)" class="w-full p-4 my-3 bg-black/40 border border-pink-400/25 rounded-xl text-white font-exo" autocomplete="off">
             
-            <input type="password" id="regPassword" placeholder="Password (min 4 karakter)" style="width:100%; padding:1rem; margin:0.75rem 0; background:rgba(0,0,0,0.4); border:1px solid #ff2a6d40; border-radius:10px; color:white; font-family:'Exo 2';" autocomplete="new-password">
+            <input type="password" id="regPassword" placeholder="Password (min 4 karakter)" class="w-full p-4 my-3 bg-black/40 border border-pink-400/25 rounded-xl text-white font-exo" autocomplete="new-password">
             
-            <input type="tel" id="regWA" placeholder="Nomor WhatsApp (Opsional, contoh: 6281234567890)" style="width:100%; padding:1rem; margin:0.75rem 0; background:rgba(0,0,0,0.4); border:1px solid #ff2a6d40; border-radius:10px; color:white; font-family:'Exo 2';" autocomplete="off">
+            <input type="tel" id="regWA" placeholder="Nomor WhatsApp (Opsional, contoh: 6281234567890)" class="w-full p-4 my-3 bg-black/40 border border-pink-400/25 rounded-xl text-white font-exo" autocomplete="off">
             
-            <button onclick="handleRegister()" style="width:100%; padding:1rem; margin:1.5rem 0; background:linear-gradient(135deg, #ff2a6d, #a00037); color:white; border:none; border-radius:50px; font-family:'Orbitron'; font-weight:bold; font-size:1.1rem; cursor:pointer; transition:all 0.2s; hover:transform:scale(1.02);">
+            <button onclick="handleRegister()" class="btn btn-secondary w-full py-4 mt-6 text-lg">
+              <i class="fas fa-user-check mr-2"></i>
               Daftar Sekarang
             </button>
             
-            <p style="font-size:0.95rem; color:#aaa; margin-top:1rem;">
+            <p class="text-gray-400 mt-4 text-center">
               Sudah punya akun? 
-              <button onclick="switchToLogin()" style="color:#ff2a6d; background:none; border:none; cursor:pointer; font-family:'Orbitron'; text-decoration:underline;">Login di sini</button>
+              <button onclick="switchToLogin()" class="text-pink-400 bg-transparent border-none cursor-pointer font-orbitron underline ml-1">
+                Login di sini
+              </button>
             </p>
           </div>
         </div>
@@ -978,6 +1257,20 @@
     // ========== INIT ==========
     window.addEventListener('load', function() {
       renderAvailableQuizzes();
+      
+      // Responsive navigation adjustment
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          navLinks.style.display = 'flex';
+          navLinks.style.flexDirection = 'row';
+          navLinks.style.position = 'static';
+          navLinks.style.background = 'transparent';
+          navLinks.style.padding = '0';
+          navLinks.style.borderTop = 'none';
+        } else {
+          navLinks.style.display = 'none';
+        }
+      });
     });
   </script>
 </body>
