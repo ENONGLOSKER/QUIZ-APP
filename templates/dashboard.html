@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,12 +7,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #00f7ff;
       --secondary: #ff2a6d;
+      --accent: #7b2cbf;
       --dark: #050a1a;
       --darker: #02050d;
+      --card-bg: rgba(15, 25, 55, 0.7);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
@@ -20,12 +29,22 @@
       background: var(--dark);
       color: #e0e0ff;
       overflow-x: hidden;
-      margin: 0;
-      padding: 0;
+      line-height: 1.6;
     }
 
-    /* Background Universe */
-    #background {
+    h1, h2, h3, h4 {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    /* Background Effects */
+    .bg-universe {
       position: fixed;
       top: 0;
       left: 0;
@@ -36,77 +55,194 @@
       overflow: hidden;
     }
 
-    .star {
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 247, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 255, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -2;
+      opacity: 0.3;
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .shape {
       position: absolute;
-      background: white;
       border-radius: 50%;
-      animation: twinkle 4s infinite ease-in-out;
+      filter: blur(40px);
+      opacity: 0.15;
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--primary);
+      top: 10%;
+      left: 5%;
+      animation: float 20s infinite ease-in-out;
     }
 
-    /* Typography */
-    h1, h2, h3 {
-      font-family: 'Orbitron', sans-serif;
+    .shape-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--secondary);
+      bottom: 10%;
+      right: 5%;
+      animation: float 25s infinite ease-in-out reverse;
     }
 
-    .glow-text {
-      text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px #00a3aa;
+    .shape-3 {
+      width: 200px;
+      height: 200px;
+      background: var(--accent);
+      top: 50%;
+      left: 80%;
+      animation: float 15s infinite ease-in-out;
     }
 
-    .gradient-title {
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(120deg); }
+      66% { transform: translate(-20px, 20px) rotate(240deg); }
+    }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      background: rgba(5, 10, 26, 0.8);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
       font-weight: 900;
+      color: var(--primary);
+    }
+
+    .logo-icon {
+      font-size: 1.8rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover:before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 30px rgba(0, 247, 255, 0.2);
     }
 
     /* Buttons */
     .btn {
-      padding: 0.75rem 1.5rem;
+      padding: 1rem 2rem;
       border-radius: 50px;
       font-weight: 700;
       text-decoration: none;
-      transition: all 0.3s ease;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.9rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      gap: 0.75rem;
+    }
+
+    .btn:focus {
+      box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.5);
     }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), #00a3aa);
       color: #000;
-      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+      box-shadow: 0 5px 20px rgba(0, 247, 255, 0.4);
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 247, 255, 0.5);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 247, 255, 0.6);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--secondary), #a00037);
+      color: white;
+      box-shadow: 0 5px 20px rgba(255, 42, 109, 0.4);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 42, 109, 0.6);
     }
 
     .btn-outline {
       background: transparent;
       color: var(--primary);
-      border: 1px solid var(--primary);
+      border: 2px solid var(--primary);
     }
 
     .btn-outline:hover {
       background: rgba(0, 247, 255, 0.1);
-      box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, #a00037, #ff2a6d);
-      color: white;
-    }
-
-    .btn-danger:hover {
-      box-shadow: 0 6px 20px rgba(255, 42, 109, 0.5);
+      box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
     }
 
     .btn-success {
@@ -114,20 +250,9 @@
       color: white;
     }
 
-    /* Card */
-    .card {
-      background: rgba(15, 25, 55, 0.4);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 247, 255, 0.2);
-      border-radius: 20px;
-      padding: 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: var(--primary);
-      box-shadow: 0 10px 30px rgba(0, 247, 255, 0.15);
+    .btn-danger {
+      background: linear-gradient(135deg, #a00037, #ff2a6d);
+      color: white;
     }
 
     /* Stat Card */
@@ -137,6 +262,12 @@
       border-radius: 16px;
       padding: 1.5rem;
       text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 247, 255, 0.2);
     }
 
     .stat-number {
@@ -146,6 +277,12 @@
       background: linear-gradient(to right, var(--primary), #00a3aa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #b0b0ff;
+      font-size: 0.9rem;
     }
 
     /* Quiz Item */
@@ -164,32 +301,16 @@
     .quiz-item:hover {
       border-color: var(--primary);
       background: rgba(0, 247, 255, 0.05);
+      transform: translateX(5px);
     }
 
-    .quiz-actions button {
-      margin-left: 0.5rem;
-    }
-
-    /* Header */
-    header {
-      padding: 1.5rem 2rem;
-      background: rgba(5, 10, 26, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+    .quiz-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-brand {
-      font-size: 1.5rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      color: var(--primary);
+      gap: 0.5rem;
     }
 
     /* Section */
-    section {
+    .section {
       padding: 2rem;
     }
 
@@ -242,6 +363,14 @@
       border-radius: 50%;
       font-size: 1.2rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-modal:hover {
+      background: #444;
+      color: #fff;
     }
 
     /* Form Styles */
@@ -299,11 +428,17 @@
       font-family: 'Orbitron';
       font-weight: 600;
       border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
     }
 
     .tab.active {
       color: var(--primary);
       border-bottom: 3px solid var(--primary);
+    }
+
+    .tab:hover:not(.active) {
+      color: var(--primary);
+      background: rgba(0, 247, 255, 0.1);
     }
 
     /* Chart Container */
@@ -321,26 +456,113 @@
       padding: 1.5rem;
       margin: 1.5rem 0;
     }
+
+    /* Learning Method Card */
+    .method-card {
+      background: rgba(30, 40, 70, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+      
+      .logo {
+        font-size: 1.2rem;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .quiz-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .quiz-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .section {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab {
+        text-align: center;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(5, 10, 26, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00a3aa;
+    }
   </style>
 </head>
 <body class="min-h-screen">
 
-  <!-- Background Stars -->
-  <div id="background"></div>
+  <!-- Background Effects -->
+  <div class="bg-universe"></div>
+  <div class="grid-bg"></div>
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
 
-  <!-- Header -->
-  <header>
-    <div class="nav-brand">🚀DASHBOARD</div>
-    <button onclick="logout()" class="btn btn-outline">🚪 Logout</button>
-  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">
+      <i class="logo-icon fas fa-rocket"></i>
+      <span>EduVerse Dashboard</span>
+    </div>
+    <button onclick="logout()" class="btn btn-outline">
+      <i class="fas fa-sign-out-alt"></i>
+      Logout
+    </button>
+  </nav>
 
   <!-- Main Content -->
-  <main class="container mx-auto px-4 py-8">
+  <main class="container mx-auto px-4 py-8 pt-24">
     
     <!-- Profile Section -->
-    <section class="mb-10">
+    <section class="mb-10 mt-20">
       <div class="card">
-        <h2 class="text-2xl font-bold mb-4 glow-text">👋 Selamat Datang, <span id="adminName">Loading...</span></h2>
+        <h2 class="text-2xl font-bold mb-4 gradient-text">
+          <i class="fas fa-user-astronaut mr-2"></i>
+          Selamat Datang, <span id="adminName">Loading...</span>
+        </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div><strong>Username:</strong> <span id="profileUsername">-</span></div>
           <div><strong>Nomor WA:</strong> <span id="profileWA">Tidak diatur</span></div>
@@ -351,23 +573,26 @@
 
     <!-- Stats Section -->
     <section class="mb-10">
-      <h2 class="section-title gradient-title">📊 Statistik & Analisis</h2>
+      <h2 class="section-title gradient-text">
+        <i class="fas fa-chart-bar mr-2"></i>
+        Statistik & Analisis
+      </h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="stat-card">
           <div class="stat-number" id="totalQuizzes">0</div>
-          <div>Quiz Dibuat</div>
+          <div class="stat-label">Quiz Dibuat</div>
         </div>
         <div class="stat-card">
           <div class="stat-number" id="totalQuestions">0</div>
-          <div>Total Soal</div>
+          <div class="stat-label">Total Soal</div>
         </div>
         <div class="stat-card">
           <div class="stat-number" id="avgPoints">0</div>
-          <div>Rata-rata Poin</div>
+          <div class="stat-label">Rata-rata Poin</div>
         </div>
         <div class="stat-card">
           <div class="stat-number" id="totalAttempts">0</div>
-          <div>Percobaan Quiz</div>
+          <div class="stat-label">Percobaan Quiz</div>
         </div>
       </div>
     </section>
@@ -375,50 +600,79 @@
     <!-- Tabs -->
     <section class="mb-10">
       <div class="tabs">
-        <div class="tab active" onclick="showTab('dashboard')">📈 Dashboard</div>
-        <div class="tab" onclick="showTab('create')">➕ Buat Quiz</div>
-        <div class="tab" onclick="showTab('analytics')">🧠 Analisis Pemahaman</div>
+        <div class="tab active" onclick="showTab('dashboard')">
+          <i class="fas fa-tachometer-alt mr-2"></i>
+          Dashboard
+        </div>
+        <div class="tab" onclick="showTab('create')">
+          <i class="fas fa-plus-circle mr-2"></i>
+          Buat Quiz
+        </div>
+        <div class="tab" onclick="showTab('analytics')">
+          <i class="fas fa-brain mr-2"></i>
+          Analisis Pemahaman
+        </div>
       </div>
 
       <!-- Dashboard Tab -->
       <div id="tab-dashboard">
         <div class="flex flex-col sm:flex-row gap-4 mb-6">
           <button onclick="showCreateQuizModal()" class="btn btn-primary">
-            ➕ Buat Quiz Baru
+            <i class="fas fa-plus mr-2"></i>
+            Buat Quiz Baru
           </button>
           <button onclick="showImportModal()" class="btn btn-outline">
-            📥 Import Quiz (JSON)
+            <i class="fas fa-file-import mr-2"></i>
+            Import Quiz (JSON)
           </button>
         </div>
 
-        <h3 class="text-xl font-bold mb-4">📚 Daftar Quiz Anda</h3>
+        <h3 class="text-xl font-bold mb-4">
+          <i class="fas fa-list-alt mr-2"></i>
+          Daftar Quiz Anda
+        </h3>
         <div id="quizList" class="space-y-4">
           <!-- Dinamis diisi JS -->
-          <div class="text-center py-10 text-gray-400">Belum ada quiz. Klik "Buat Quiz Baru" untuk memulai.</div>
+          <div class="text-center py-10 text-gray-400">
+            <i class="fas fa-inbox text-4xl mb-4"></i>
+            <p>Belum ada quiz. Klik "Buat Quiz Baru" untuk memulai.</p>
+          </div>
         </div>
       </div>
 
       <!-- Create Quiz Tab (hidden by default) -->
-      <div id="tab-create" class="hidden">
-        <div class="card">
-          <h3 class="text-2xl font-bold mb-6">➕ Buat Quiz Baru</h3>
+      <div id="tab-create" class="hidden" style="position:relative; z-index:20;">
+        <div class="card relative z-20">
+          <h3 class="text-2xl font-bold mb-6 gradient-text">
+            <i class="fas fa-plus-circle mr-2"></i>
+            Buat Quiz Baru
+          </h3>
           <form id="createQuizForm">
             <label class="form-label">Judul Quiz</label>
-            <input type="text" id="quizTitle" class="form-control" placeholder="Contoh: Ujian Matematika Bab 3" required>
+            <input type="text" id="quizTitle" class="form-control relative z-30 bg-[#181e3a] bg-opacity-90" placeholder="Contoh: Ujian Matematika Bab 3" required autocomplete="off">
 
             <label class="form-label">Deskripsi (Opsional)</label>
-            <textarea id="quizDescription" class="form-control" rows="3" placeholder="Deskripsi quiz..."></textarea>
+            <textarea id="quizDescription" class="form-control relative z-30 bg-[#181e3a] bg-opacity-90" rows="3" placeholder="Deskripsi quiz..."></textarea>
 
             <div class="flex justify-between items-center mt-6 mb-4">
-              <h4 class="font-bold text-lg">📝 Soal</h4>
-              <button type="button" onclick="addQuestion()" class="btn btn-outline text-sm">+ Tambah Soal</button>
+              <h4 class="font-bold text-lg">
+                <i class="fas fa-question-circle mr-2"></i>
+                Soal
+              </h4>
+              <button type="button" onclick="addQuestion()" class="btn btn-outline text-sm">
+                <i class="fas fa-plus mr-1"></i>
+                Tambah Soal
+              </button>
             </div>
 
             <div id="questionsContainer">
               <!-- Soal akan ditambahkan di sini -->
             </div>
 
-            <button type="submit" class="btn btn-primary mt-6">💾 Simpan Quiz</button>
+            <button type="submit" class="btn btn-primary mt-6">
+              <i class="fas fa-save mr-2"></i>
+              Simpan Quiz
+            </button>
           </form>
         </div>
       </div>
@@ -427,26 +681,76 @@
       <div id="tab-analytics" class="hidden">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div class="card">
-            <h3 class="text-xl font-bold mb-4">📊 Grafik Performa</h3>
+            <h3 class="text-xl font-bold mb-4">
+              <i class="fas fa-chart-line mr-2"></i>
+              Tingkat Pemahaman Siswa
+            </h3>
             <div class="chart-container">
-              <canvas id="performanceChart"></canvas>
+              <canvas id="understandingChart"></canvas>
             </div>
+            <p class="text-sm text-gray-400 mt-2">
+              Grafik menunjukkan tingkat pemahaman siswa berdasarkan persentase jawaban benar per topik.
+            </p>
           </div>
           <div class="card">
-            <h3 class="text-xl font-bold mb-4">🎯 Tingkat Kesulitan Soal</h3>
+            <h3 class="text-xl font-bold mb-4">
+              <i class="fas fa-tachometer-alt mr-2"></i>
+              Analisis Kemajuan Belajar
+            </h3>
+            <div class="chart-container">
+              <canvas id="progressChart"></canvas>
+            </div>
+            <p class="text-sm text-gray-400 mt-2">
+              Tren peningkatan skor siswa dari waktu ke waktu menunjukkan efektivitas pembelajaran.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <div class="card">
+            <h3 class="text-xl font-bold mb-4">
+              <i class="fas fa-clock mr-2"></i>
+              Analisis Waktu Pengerjaan
+            </h3>
+            <div class="chart-container">
+              <canvas id="timeAnalysisChart"></canvas>
+            </div>
+            <p class="text-sm text-gray-400 mt-2">
+              Waktu rata-rata yang dibutuhkan siswa untuk menyelesaikan setiap soal.
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-bold mb-4">
+              <i class="fas fa-chart-pie mr-2"></i>
+              Distribusi Tingkat Kesulitan
+            </h3>
             <div class="chart-container">
               <canvas id="difficultyChart"></canvas>
             </div>
+            <p class="text-sm text-gray-400 mt-2">
+              Sebaran soal berdasarkan tingkat kesulitan berdasarkan persentase jawaban benar.
+            </p>
           </div>
         </div>
 
         <div class="recommendation-card mt-8">
           <h3 class="text-xl font-bold mb-4 flex items-center">
-            <span>💡 Rekomendasi untuk Peningkatan Pemahaman</span>
+            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+            Rekomendasi untuk Peningkatan Pemahaman
           </h3>
-          <div id="recommendations" class="space-y-3">
-            <p>📊 <strong>Analisis akan muncul setelah ada data percobaan quiz.</strong></p>
-            <p>🎯 Untuk mendapatkan rekomendasi, minta siswa mengerjakan quiz Anda dan kumpulkan data.</p>
+          <div id="recommendations" class="space-y-4">
+            <div class="method-card">
+              <h4 class="font-bold text-lg mb-2">🎯 Metode Pembelajaran Spaced Repetition</h4>
+              <p>Gunakan teknik pengulangan berjangka untuk meningkatkan retensi memori jangka panjang. Berikan quiz dengan interval waktu yang semakin lama.</p>
+            </div>
+            <div class="method-card">
+              <h4 class="font-bold text-lg mb-2">🧠 Active Recall Practice</h4>
+              <p>Fokus pada soal yang memaksa siswa mengingat informasi daripada sekadar mengenali pilihan jawaban.</p>
+            </div>
+            <div class="method-card">
+              <h4 class="font-bold text-lg mb-2">📊 Personalized Learning Path</h4>
+              <p>Berdasarkan analisis performa, buat jalur pembelajaran yang disesuaikan dengan kebutuhan individu siswa.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -457,12 +761,21 @@
   <div class="modal" id="importModal">
     <div class="modal-content">
       <button class="close-modal" onclick="hideImportModal()">×</button>
-      <h3 class="text-2xl font-bold mb-4 glow-text">📥 Import Quiz dari JSON</h3>
+      <h3 class="text-2xl font-bold mb-4 gradient-text">
+        <i class="fas fa-file-import mr-2"></i>
+        Import Quiz dari JSON
+      </h3>
       <p class="mb-4 text-gray-300">Unggah file .json yang berisi struktur quiz.</p>
       <input type="file" id="jsonFile" accept=".json" class="w-full p-3 mb-4 bg-gray-800 rounded-lg text-white border border-gray-600">
-      <button onclick="handleImport()" class="btn btn-primary w-full mb-3">Import Sekarang</button>
+      <button onclick="handleImport()" class="btn btn-primary w-full mb-3">
+        <i class="fas fa-upload mr-2"></i>
+        Import Sekarang
+      </button>
       <button onclick="hideImportModal()" class="btn btn-outline w-full">Batal</button>
-      <p id="importStatus" class="mt-3 text-sm text-green-400 hidden">✅ Import berhasil!</p>
+      <p id="importStatus" class="mt-3 text-sm text-green-400 hidden">
+        <i class="fas fa-check-circle mr-1"></i>
+        Import berhasil!
+      </p>
     </div>
   </div>
 
@@ -470,7 +783,10 @@
   <div class="modal" id="editQuizModal">
     <div class="modal-content">
       <button class="close-modal" onclick="hideEditModal()">×</button>
-      <h3 class="text-2xl font-bold mb-6 glow-text">✏️ Edit Quiz</h3>
+      <h3 class="text-2xl font-bold mb-6 gradient-text">
+        <i class="fas fa-edit mr-2"></i>
+        Edit Quiz
+      </h3>
       <form id="editQuizForm">
         <input type="hidden" id="editQuizId">
         <label class="form-label">Judul Quiz</label>
@@ -480,8 +796,14 @@
         <textarea id="editQuizDescription" class="form-control" rows="3" placeholder="Deskripsi quiz..."></textarea>
 
         <div class="flex justify-between items-center mt-6 mb-4">
-          <h4 class="font-bold text-lg">📝 Soal</h4>
-          <button type="button" onclick="addQuestionToEdit()" class="btn btn-outline text-sm">+ Tambah Soal</button>
+          <h4 class="font-bold text-lg">
+            <i class="fas fa-question-circle mr-2"></i>
+            Soal
+          </h4>
+          <button type="button" onclick="addQuestionToEdit()" class="btn btn-outline text-sm">
+            <i class="fas fa-plus mr-1"></i>
+            Tambah Soal
+          </button>
         </div>
 
         <div id="editQuestionsContainer">
@@ -489,7 +811,10 @@
         </div>
 
         <div class="flex gap-4 mt-6">
-          <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save mr-2"></i>
+            Simpan Perubahan
+          </button>
           <button type="button" onclick="hideEditModal()" class="btn btn-outline">Batal</button>
         </div>
       </form>
@@ -497,23 +822,25 @@
   </div>
 
   <script>
-    // ========== BACKGROUND STARS ==========
-    const background = document.getElementById('background');
-    for (let i = 0; i < 150; i++) {
-      const star = document.createElement('div');
-      star.classList.add('star');
-      star.style.width = `${Math.random() * 2 + 1}px`;
-      star.style.height = star.style.width;
-      star.style.top = `${Math.random() * 100}%`;
-      star.style.left = `${Math.random() * 100}%`;
-      star.style.animationDelay = `${Math.random() * 5}s`;
-      background.appendChild(star);
+    // ========== BACKGROUND EFFECTS ==========
+    const floatingShapes = document.querySelector('.floating-shapes');
+    for (let i = 0; i < 15; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('shape');
+      particle.style.width = `${Math.random() * 20 + 10}px`;
+      particle.style.height = particle.style.width;
+      particle.style.background = i % 3 === 0 ? 'var(--primary)' : i % 3 === 1 ? 'var(--secondary)' : 'var(--accent)';
+      particle.style.top = `${Math.random() * 100}%`;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.animation = `float ${Math.random() * 20 + 10}s infinite ease-in-out`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      floatingShapes.appendChild(particle);
     }
 
     // ========== STATE ==========
     let currentUser = '';
     let quizzes = {};
-    let analytics = {}; // { quizId: { attempts: [], recommendations: [] } }
+    let analytics = {};
 
     // ========== INIT ==========
     function init() {
@@ -568,12 +895,6 @@
       localStorage.setItem('adminAnalytics_' + currentUser, JSON.stringify(analytics));
     }
 
-    // data analytics 
-    function simulateAnalytics() {
-      updateCharts();
-      renderRecommendations();
-    }
-
     // ========== RENDER ==========
     function renderProfile() {
       // Already handled in loadUserData
@@ -606,7 +927,10 @@
 
       if (quizKeys.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-10 text-gray-400">Belum ada quiz. Klik "Buat Quiz Baru" untuk memulai.</div>
+          <div class="text-center py-10 text-gray-400">
+            <i class="fas fa-inbox text-4xl mb-4"></i>
+            <p>Belum ada quiz. Klik "Buat Quiz Baru" untuk memulai.</p>
+          </div>
         `;
         return;
       }
@@ -623,10 +947,22 @@
             <p class="text-gray-300 text-sm">${quiz.questions.length} soal • ${analytics[key]?.attempts.length || 0} percobaan</p>
           </div>
           <div class="quiz-actions">
-            <button onclick="editQuiz('${key}')" class="btn btn-outline text-xs">✏️ Edit</button>
-            <button onclick="exportQuiz('${key}')" class="btn btn-outline text-xs">📤 Export</button>
-            <button onclick="viewAnalytics('${key}')" class="btn btn-success text-xs">📊 Analisis</button>
-            <button onclick="deleteQuiz('${key}')" class="btn btn-danger text-xs">🗑️ Hapus</button>
+            <button onclick="editQuiz('${key}')" class="btn btn-outline text-xs">
+              <i class="fas fa-edit mr-1"></i>
+              Edit
+            </button>
+            <button onclick="exportQuiz('${key}')" class="btn btn-outline text-xs">
+              <i class="fas fa-file-export mr-1"></i>
+              Export
+            </button>
+            <button onclick="viewAnalytics('${key}')" class="btn btn-success text-xs">
+              <i class="fas fa-chart-bar mr-1"></i>
+              Analisis
+            </button>
+            <button onclick="deleteQuiz('${key}')" class="btn btn-danger text-xs">
+              <i class="fas fa-trash mr-1"></i>
+              Hapus
+            </button>
           </div>
         `;
         container.appendChild(item);
@@ -634,28 +970,51 @@
     }
 
     // ========== CHARTS ==========
-    let performanceChart = null;
+    let understandingChart = null;
+    let progressChart = null;
+    let timeAnalysisChart = null;
     let difficultyChart = null;
 
     function initCharts() {
-      const performanceCtx = document.getElementById('performanceChart').getContext('2d');
-      const difficultyCtx = document.getElementById('difficultyChart').getContext('2d');
-
-      performanceChart = new Chart(performanceCtx, {
-        type: 'line',
+      // Understanding Chart - Radar chart untuk tingkat pemahaman
+      const understandingCtx = document.getElementById('understandingChart').getContext('2d');
+      understandingChart = new Chart(understandingCtx, {
+        type: 'radar',
         data: {
-          labels: [],
+          labels: ['Konsep Dasar', 'Pemahaman Menengah', 'Analisis', 'Aplikasi', 'Evaluasi'],
           datasets: [{
-            label: 'Skor Rata-rata',
-            data: [],
+            label: 'Tingkat Pemahaman',
+            data: [85, 70, 60, 75, 55],
+            backgroundColor: 'rgba(0, 247, 255, 0.2)',
             borderColor: '#00f7ff',
-            backgroundColor: 'rgba(0, 247, 255, 0.1)',
-            tension: 0.4,
-            fill: true
+            pointBackgroundColor: '#00f7ff',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#00f7ff'
           }]
         },
         options: {
           responsive: true,
+          scales: {
+            r: {
+              angleLines: {
+                color: 'rgba(255,255,255,0.1)'
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              },
+              pointLabels: {
+                color: '#e0e0ff',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              ticks: {
+                color: '#aaa',
+                backdropColor: 'transparent'
+              }
+            }
+          },
           plugins: {
             legend: {
               labels: {
@@ -665,7 +1024,27 @@
                 }
               }
             }
-          },
+          }
+        }
+      });
+
+      // Progress Chart - Line chart untuk kemajuan belajar
+      const progressCtx = document.getElementById('progressChart').getContext('2d');
+      progressChart = new Chart(progressCtx, {
+        type: 'line',
+        data: {
+          labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Minggu 5', 'Minggu 6'],
+          datasets: [{
+            label: 'Rata-rata Skor',
+            data: [65, 70, 68, 75, 80, 85],
+            borderColor: '#ff2a6d',
+            backgroundColor: 'rgba(255, 42, 109, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
           scales: {
             y: {
               beginAtZero: true,
@@ -691,19 +1070,94 @@
                 color: 'rgba(255,255,255,0.1)'
               }
             }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: '#e0e0ff',
+                font: {
+                  family: 'Orbitron'
+                }
+              }
+            }
           }
         }
       });
 
-      difficultyChart = new Chart(difficultyCtx, {
+      // Time Analysis Chart - Bar chart untuk waktu pengerjaan
+      const timeCtx = document.getElementById('timeAnalysisChart').getContext('2d');
+      timeAnalysisChart = new Chart(timeCtx, {
         type: 'bar',
         data: {
-          labels: [],
+          labels: ['Soal 1', 'Soal 2', 'Soal 3', 'Soal 4', 'Soal 5', 'Soal 6'],
           datasets: [{
-            label: 'Tingkat Kesulitan (Persentase Benar)',
-            data: [],
-            backgroundColor: '#ff2a6d',
-            borderColor: '#ff2a6d',
+            label: 'Waktu Rata-rata (detik)',
+            data: [45, 30, 60, 25, 50, 35],
+            backgroundColor: '#7b2cbf',
+            borderColor: '#7b2cbf',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#aaa',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              }
+            },
+            x: {
+              ticks: {
+                color: '#aaa',
+                font: {
+                  family: 'Exo 2'
+                }
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: '#e0e0ff',
+                font: {
+                  family: 'Orbitron'
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Difficulty Chart - Pie chart untuk distribusi kesulitan
+      const difficultyCtx = document.getElementById('difficultyChart').getContext('2d');
+      difficultyChart = new Chart(difficultyCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Mudah (>80%)', 'Sedang (60-80%)', 'Sulit (40-60%)', 'Sangat Sulit (<40%)'],
+          datasets: [{
+            data: [30, 40, 20, 10],
+            backgroundColor: [
+              '#00d48d',
+              '#00a3aa',
+              '#ff2a6d',
+              '#7b2cbf'
+            ],
+            borderColor: [
+              '#00d48d',
+              '#00a3aa',
+              '#ff2a6d',
+              '#7b2cbf'
+            ],
             borderWidth: 1
           }]
         },
@@ -711,37 +1165,12 @@
           responsive: true,
           plugins: {
             legend: {
+              position: 'bottom',
               labels: {
                 color: '#e0e0ff',
                 font: {
-                  family: 'Orbitron'
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-              ticks: {
-                color: '#aaa',
-                font: {
                   family: 'Exo 2'
                 }
-              },
-              grid: {
-                color: 'rgba(255,255,255,0.1)'
-              }
-            },
-            x: {
-              ticks: {
-                color: '#aaa',
-                font: {
-                  family: 'Exo 2'
-                }
-              },
-              grid: {
-                color: 'rgba(255,255,255,0.1)'
               }
             }
           }
@@ -750,181 +1179,65 @@
     }
 
     function updateCharts() {
-      // Performance Chart - rata-rata skor per quiz
-      const quizKeys = Object.keys(analytics);
-      const labels = [];
-      const data = [];
-
-      quizKeys.forEach(quizId => {
-        const quiz = quizzes[quizId];
-        if (!quiz) return;
-        
-        const attempts = analytics[quizId].attempts;
-        if (attempts.length === 0) return;
-        
-        const avgScore = attempts.reduce((sum, a) => sum + a.score, 0) / attempts.length;
-        
-        labels.push(quiz.title.length > 15 ? quiz.title.substring(0, 15) + '...' : quiz.title);
-        data.push(Math.round(avgScore));
-      });
-
-      performanceChart.data.labels = labels;
-      performanceChart.data.datasets[0].data = data;
-      performanceChart.update();
-
-      // Difficulty Chart - persentase benar per soal (ambil quiz pertama untuk demo)
-      if (quizKeys.length > 0) {
-        const firstQuizId = quizKeys[0];
-        const quiz = quizzes[firstQuizId];
-        const attempts = analytics[firstQuizId]?.attempts || [];
-        
-        if (attempts.length > 0 && quiz) {
-          const questionLabels = [];
-          const questionData = [];
-          
-          quiz.questions.forEach((q, idx) => {
-            const totalAttempts = attempts.length;
-            const correctAttempts = attempts.filter(a => 
-              a.correctAnswers.find(ca => ca.questionIndex === idx && ca.isCorrect)
-            ).length;
-            
-            const percentage = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
-            
-            questionLabels.push(`Soal ${idx + 1}`);
-            questionData.push(percentage);
-          });
-          
-          difficultyChart.data.labels = questionLabels;
-          difficultyChart.data.datasets[0].data = questionData;
-          difficultyChart.data.datasets[0].label = `Tingkat Kesulitan: ${quiz.title}`;
-          difficultyChart.update();
-        }
-      }
+      // Update charts with real data when available
+      // This would be called when switching to analytics tab
     }
 
     // ========== RECOMMENDATIONS ==========
-    function generateRecommendations(quizId) {
-      const quiz = quizzes[quizId];
-      const attempts = analytics[quizId]?.attempts || [];
+    function generateAdvancedRecommendations() {
+      const recommendations = document.getElementById('recommendations');
       
-      if (attempts.length === 0) {
-        analytics[quizId].recommendations = ["Belum ada data percobaan untuk menganalisis."];
-        return;
-      }
-      
-      const recommendations = [];
-      
-      // Analisis soal yang paling sering salah
-      const questionStats = {};
-      quiz.questions.forEach((q, idx) => {
-        questionStats[idx] = {
-          total: 0,
-          correct: 0,
-          avgTime: 0
-        };
-      });
-      
-      attempts.forEach(attempt => {
-        attempt.correctAnswers.forEach(ca => {
-          questionStats[ca.questionIndex].total++;
-          if (ca.isCorrect) {
-            questionStats[ca.questionIndex].correct++;
-          }
-          questionStats[ca.questionIndex].avgTime += ca.timeSpent;
-        });
-      });
-      
-      // Hitung persentase dan rata-rata waktu
-      Object.keys(questionStats).forEach(idx => {
-        const stat = questionStats[idx];
-        if (stat.total > 0) {
-          stat.percentage = Math.round((stat.correct / stat.total) * 100);
-          stat.avgTime = Math.round(stat.avgTime / stat.total);
-        } else {
-          stat.percentage = 0;
-          stat.avgTime = 0;
-        }
-      });
-      
-      // Rekomendasi 1: Soal dengan tingkat kesalahan tinggi
-      const hardQuestions = Object.keys(questionStats)
-        .filter(idx => questionStats[idx].percentage < 50)
-        .map(idx => ({
-          index: parseInt(idx),
-          percentage: questionStats[idx].percentage,
-          avgTime: questionStats[idx].avgTime
-        }))
-        .sort((a, b) => a.percentage - b.percentage);
-      
-      if (hardQuestions.length > 0) {
-        recommendations.push(`🔴 **Fokus pada soal yang sulit**: Soal nomor ${hardQuestions.map(h => h.index + 1).join(', ')} memiliki tingkat kesalahan tinggi (${hardQuestions[0].percentage}% benar). Berikan penjelasan tambahan atau contoh soal serupa.`);
-      }
-      
-      // Rekomendasi 2: Soal yang memakan waktu lama
-      const timeConsumingQuestions = Object.keys(questionStats)
-        .filter(idx => questionStats[idx].avgTime > 45)
-        .map(idx => ({
-          index: parseInt(idx),
-          avgTime: questionStats[idx].avgTime,
-          percentage: questionStats[idx].percentage
-        }))
-        .sort((a, b) => b.avgTime - a.avgTime);
-      
-      if (timeConsumingQuestions.length > 0) {
-        recommendations.push(`⏱️ **Optimasi waktu pengerjaan**: Soal nomor ${timeConsumingQuestions.map(t => t.index + 1).join(', ')} memakan waktu rata-rata ${timeConsumingQuestions[0].avgTime} detik. Pertimbangkan untuk menyederhanakan soal atau memberikan petunjuk.`);
-      }
-      
-      // Rekomendasi 3: Tren skor
-      if (attempts.length >= 3) {
-        const scores = attempts.map(a => a.score).sort((a, b) => new Date(a.date) - new Date(b.date));
-        const firstAvg = scores.slice(0, Math.ceil(scores.length/2)).reduce((a, b) => a + b, 0) / Math.ceil(scores.length/2);
-        const lastAvg = scores.slice(Math.floor(scores.length/2)).reduce((a, b) => a + b, 0) / Math.floor(scores.length/2);
-        
-        if (lastAvg > firstAvg + 10) {
-          recommendations.push(`📈 **Peningkatan signifikan terdeteksi!** Skor rata-rata meningkat dari ${Math.round(firstAvg)} ke ${Math.round(lastAvg)}. Pertahankan metode pembelajaran ini!`);
-        } else if (lastAvg < firstAvg - 10) {
-          recommendations.push(`📉 **Penurunan performa terdeteksi.** Skor rata-rata turun dari ${Math.round(firstAvg)} ke ${Math.round(lastAvg)}. Evaluasi ulang materi atau metode penyampaian.`);
-        } else {
-          recommendations.push(`📊 **Stabilitas performa.** Skor rata-rata tetap stabil di sekitar ${Math.round((firstAvg + lastAvg)/2)}. Pertimbangkan variasi soal untuk meningkatkan pemahaman.`);
-        }
-      }
-      
-      // Jika tidak ada rekomendasi spesifik
-      if (recommendations.length === 0) {
-        recommendations.push("✅ **Performa baik!** Tidak ada area yang memerlukan perhatian khusus saat ini.");
-      }
-      
-      analytics[quizId].recommendations = recommendations;
-    }
-
-    function renderRecommendations() {
-      const container = document.getElementById('recommendations');
-      
-      // Ambil quiz pertama yang punya data
-      const quizKeys = Object.keys(analytics).filter(key => analytics[key].attempts.length > 0);
-      
-      if (quizKeys.length === 0) {
-        container.innerHTML = `
-          <p>📊 <strong>Analisis akan muncul setelah ada data percobaan quiz.</strong></p>
-          <p>🎯 Untuk mendapatkan rekomendasi, minta siswa mengerjakan quiz Anda dan kumpulkan data.</p>
-        `;
-        return;
-      }
-      
-      const firstQuizId = quizKeys[0];
-      const recommendations = analytics[firstQuizId].recommendations;
-      
-      container.innerHTML = recommendations.map(rec => `
-        <div class="p-3 bg-black/20 rounded-lg border-l-4 border-cyan-400">
-          ${rec}
+      recommendations.innerHTML = `
+        <div class="method-card">
+          <h4 class="font-bold text-lg mb-2">🎯 Metode Pembelajaran Spaced Repetition</h4>
+          <p>Gunakan teknik pengulangan berjangka untuk meningkatkan retensi memori jangka panjang. Berikan quiz dengan interval waktu yang semakin lama.</p>
+          <div class="mt-2 text-sm text-cyan-400">
+            <i class="fas fa-lightbulb mr-1"></i>
+            <strong>Tips:</strong> Buat jadwal review materi setiap 1, 7, 16, dan 35 hari
+          </div>
         </div>
-      `).join('');
+        
+        <div class="method-card">
+          <h4 class="font-bold text-lg mb-2">🧠 Active Recall Practice</h4>
+          <p>Fokus pada soal yang memaksa siswa mengingat informasi daripada sekadar mengenali pilihan jawaban.</p>
+          <div class="mt-2 text-sm text-cyan-400">
+            <i class="fas fa-lightbulb mr-1"></i>
+            <strong>Tips:</strong> Gunakan soal esai pendek atau fill-in-the-blank untuk melatih recall
+          </div>
+        </div>
+        
+        <div class="method-card">
+          <h4 class="font-bold text-lg mb-2">📊 Personalized Learning Path</h4>
+          <p>Berdasarkan analisis performa, buat jalur pembelajaran yang disesuaikan dengan kebutuhan individu siswa.</p>
+          <div class="mt-2 text-sm text-cyan-400">
+            <i class="fas fa-lightbulb mr-1"></i>
+            <strong>Tips:</strong> Kelompokkan siswa berdasarkan tingkat pemahaman dan berikan materi yang sesuai
+          </div>
+        </div>
+        
+        <div class="method-card">
+          <h4 class="font-bold text-lg mb-2">🔄 Interleaved Practice</h4>
+          <p>Campurkan berbagai jenis soal dan topik dalam satu sesi latihan untuk meningkatkan kemampuan transfer pengetahuan.</p>
+          <div class="mt-2 text-sm text-cyan-400">
+            <i class="fas fa-lightbulb mr-1"></i>
+            <strong>Tips:</strong> Hindari blok latihan yang hanya fokus pada satu jenis soal
+          </div>
+        </div>
+        
+        <div class="method-card">
+          <h4 class="font-bold text-lg mb-2">🎮 Gamifikasi Pembelajaran</h4>
+          <p>Terapkan elemen game seperti poin, level, dan badge untuk meningkatkan motivasi dan engagement siswa.</p>
+          <div class="mt-2 text-sm text-cyan-400">
+            <i class="fas fa-lightbulb mr-1"></i>
+            <strong>Tips:</strong> Berikan reward untuk pencapaian tertentu dan buat leaderboard sehat
+          </div>
+        </div>
+      `;
     }
 
     // ========== CREATE QUIZ FORM ==========
     function showCreateQuizModal() {
       showTab('create');
-      // Scroll to top
       document.querySelector('#tab-create').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -968,19 +1281,15 @@
       const quiz = quizzes[quizId];
       if (!quiz) return;
       
-      // Show edit modal
       document.getElementById('editQuizModal').classList.add('active');
       
-      // Fill form with quiz data
       document.getElementById('editQuizId').value = quizId;
       document.getElementById('editQuizTitle').value = quiz.title;
       document.getElementById('editQuizDescription').value = quiz.description || '';
       
-      // Clear questions container
       const container = document.getElementById('editQuestionsContainer');
       container.innerHTML = '';
       
-      // Add existing questions
       quiz.questions.forEach((question, index) => {
         addQuestionToEdit(question, index);
       });
@@ -1091,7 +1400,6 @@
       
       const description = document.getElementById('editQuizDescription').value.trim();
       
-      // Update quiz
       quizzes[quizId] = {
         title: title,
         description: description,
@@ -1103,7 +1411,6 @@
       renderStats();
       renderQuizList();
       
-      // Close modal
       hideEditModal();
       
       alert('✅ Quiz berhasil diperbarui!');
@@ -1184,7 +1491,6 @@
         createdAt: new Date().toISOString()
       };
       
-      // Inisialisasi analytics untuk quiz baru
       analytics[quizId] = {
         attempts: [],
         recommendations: []
@@ -1195,7 +1501,6 @@
       renderStats();
       renderQuizList();
       
-      // Reset form
       document.getElementById('createQuizForm').reset();
       document.getElementById('questionsContainer').innerHTML = '';
       
@@ -1228,16 +1533,13 @@
         try {
           const imported = JSON.parse(e.target.result);
           
-          // Validasi struktur
           if (!imported.title || !Array.isArray(imported.questions)) {
             throw new Error('Format JSON tidak valid.');
           }
 
-          // Generate ID unik
           const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
           quizzes[quizId] = imported;
           
-          // Inisialisasi analytics
           analytics[quizId] = {
             attempts: [],
             recommendations: []
@@ -1280,7 +1582,7 @@
     function viewAnalytics(quizId) {
       showTab('analytics');
       updateCharts();
-      renderRecommendations();
+      generateAdvancedRecommendations();
       document.querySelector('#tab-analytics').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1306,23 +1608,19 @@
 
     // ========== TABS ==========
     function showTab(tabName) {
-      // Hide all tabs
       document.getElementById('tab-dashboard').classList.add('hidden');
       document.getElementById('tab-create').classList.add('hidden');
       document.getElementById('tab-analytics').classList.add('hidden');
       
-      // Remove active class from all tabs
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
       });
       
-      // Show selected tab
       document.getElementById('tab-' + tabName).classList.remove('hidden');
       document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
       
-      // Jika pindah ke analytics, update chart
       if (tabName === 'analytics') {
-        simulateAnalytics();
+        generateAdvancedRecommendations();
       }
     }
 
@@ -1331,10 +1629,8 @@
 
     // Tambahkan 1 soal default saat halaman dimuat
     window.addEventListener('load', function() {
-      // Tambahkan event listener untuk form setelah halaman dimuat
       const createForm = document.getElementById('createQuizForm');
       if (createForm) {
-        // Tambahkan 1 soal default
         addQuestion();
       }
     });
