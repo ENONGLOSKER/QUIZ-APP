@@ -1336,23 +1336,25 @@
     
     document.getElementById('editQuizForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
-      
+
       const quizId = document.getElementById('editQuizId').value;
       const title = document.getElementById('editQuizTitle').value.trim();
       if (!title) {
         alert('Judul quiz wajib diisi.');
         return;
       }
-      
-      const questionElements = document.querySelectorAll('.question-item');
+
+      // PERBAIKAN: Ambil hanya question-item di editQuestionsContainer
+      const container = document.getElementById('editQuestionsContainer');
+      const questionElements = container.querySelectorAll('.question-item');
       if (questionElements.length === 0) {
         alert('Minimal tambahkan 1 soal.');
         return;
       }
-      
+
       const questions = [];
       let hasError = false;
-      
+
       questionElements.forEach((el, idx) => {
         const text = el.querySelector('input[name="questionText[]"]').value.trim();
         const answers = [
@@ -1363,31 +1365,31 @@
         ];
         const correct = parseInt(el.querySelector('select[name="correctAnswer[]"]').value);
         const points = parseInt(el.querySelector('input[name="points[]"]').value);
-        
+
         if (!text) {
           alert(`Pertanyaan ${idx + 1} wajib diisi.`);
           hasError = true;
           return;
         }
-        
+
         if (answers.some(a => !a)) {
           alert(`Semua pilihan jawaban di pertanyaan ${idx + 1} wajib diisi.`);
           hasError = true;
           return;
         }
-        
+
         if (isNaN(correct) || correct < 0 || correct > 3) {
           alert(`Pilih jawaban benar untuk pertanyaan ${idx + 1}.`);
           hasError = true;
           return;
         }
-        
+
         if (isNaN(points) || points < 1) {
           alert(`Poin untuk pertanyaan ${idx + 1} minimal 1.`);
           hasError = true;
           return;
         }
-        
+
         questions.push({
           question: text,
           answers: answers,
@@ -1395,24 +1397,24 @@
           points: points
         });
       });
-      
+
       if (hasError) return;
-      
+
       const description = document.getElementById('editQuizDescription').value.trim();
-      
+
       quizzes[quizId] = {
         title: title,
         description: description,
         questions: questions,
         createdAt: quizzes[quizId].createdAt || new Date().toISOString()
       };
-      
+
       saveQuizzes();
       renderStats();
       renderQuizList();
-      
+
       hideEditModal();
-      
+
       alert('✅ Quiz berhasil diperbarui!');
       showTab('dashboard');
     });
