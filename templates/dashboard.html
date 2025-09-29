@@ -1179,8 +1179,88 @@
     }
 
     function updateCharts() {
-      // Update charts with real data when available
-      // This would be called when switching to analytics tab
+      // Gabungkan semua attempt dari semua quiz
+      const allAttempts = Object.values(analytics).flatMap(q => q.attempts || []);
+      const allQuestions = Object.values(quizzes).flatMap(q => q.questions || []);
+      const soalCount = allQuestions.length;
+
+      // 1. Tingkat Pemahaman Siswa (Radar Chart)
+      // Jika soal punya kategori, gunakan. Jika tidak, bagi rata.
+      const categories = ['Konsep Dasar', 'Pemahaman Menengah', 'Analisis', 'Aplikasi', 'Evaluasi'];
+      let categoryScores = [0, 0, 0, 0, 0];
+      let categoryCounts = [0, 0, 0, 0, 0];
+
+      allAttempts.forEach(attempt => {
+        (attempt.answers || []).forEach((ans, idx) => {
+          const q = allQuestions[idx] || {};
+          const cat = typeof q.category === 'number' ? q.category : idx % 5;
+          if (ans.isCorrect) categoryScores[cat]++;
+          categoryCounts[cat]++;
+        });
+      });
+      const categoryPercent = categoryScores.map((v, i) =>
+        categoryCounts[i] ? Math.round((v / categoryCounts[i]) * 100) : 0
+      );
+      understandingChart.data.datasets[0].data = categoryPercent;
+      understandingChart.update();
+
+      // 2. Kemajuan Belajar (Line Chart)
+      // Rata-rata skor per 5 attempt
+      let progressLabels = [];
+      let progressData = [];
+      if (allAttempts.length > 0) {
+        const chunkSize = 5;
+        for (let i = 0; i < allAttempts.length; i += chunkSize) {
+          const chunk = allAttempts.slice(i, i + chunkSize);
+          const total = chunk.reduce((sum, att) => sum + (att.score || 0), 0);
+          progressLabels.push('Percobaan ' + (i + 1) + '-' + (i + chunk.length));
+          progressData.push(chunk.length ? Math.round(total / chunk.length) : 0);
+        }
+      }
+      progressChart.data.labels = progressLabels.length ? progressLabels : ['Belum Ada'];
+      progressChart.data.datasets[0].data = progressData.length ? progressData : [0];
+      progressChart.update();
+
+      // 3. Analisis Waktu Pengerjaan (Bar Chart)
+      // Rata-rata waktu per soal
+      let waktuPerSoal = Array(soalCount).fill(0);
+      let countPerSoal = Array(soalCount).fill(0);
+      allAttempts.forEach(attempt => {
+        (attempt.answers || []).forEach((ans, idx) => {
+          if (typeof ans.timeSpent === 'number') {
+            waktuPerSoal[idx] += ans.timeSpent;
+            countPerSoal[idx]++;
+          }
+        });
+      });
+      let waktuRata2 = waktuPerSoal.map((total, idx) =>
+        countPerSoal[idx] ? Math.round(total / countPerSoal[idx]) : 0
+      );
+      timeAnalysisChart.data.labels = waktuRata2.map((_, i) => 'Soal ' + (i + 1));
+      timeAnalysisChart.data.datasets[0].data = waktuRata2;
+      timeAnalysisChart.update();
+
+      // 4. Distribusi Tingkat Kesulitan (Pie Chart)
+      // Berdasarkan persentase benar per soal
+      let benarPerSoal = Array(soalCount).fill(0);
+      let totalPerSoal = Array(soalCount).fill(0);
+      allAttempts.forEach(attempt => {
+        (attempt.answers || []).forEach((ans, idx) => {
+          if (ans.isCorrect) benarPerSoal[idx]++;
+          totalPerSoal[idx]++;
+        });
+      });
+      let distribusi = [0, 0, 0, 0]; // Mudah, Sedang, Sulit, Sangat Sulit
+      benarPerSoal.forEach((benar, idx) => {
+        const total = totalPerSoal[idx];
+        const persen = total ? (benar / total) * 100 : 0;
+        if (persen > 80) distribusi[0]++;
+        else if (persen > 60) distribusi[1]++;
+        else if (persen > 40) distribusi[2]++;
+        else distribusi[3]++;
+      });
+      difficultyChart.data.datasets[0].data = distribusi;
+      difficultyChart.update();
     }
 
     // ========== RECOMMENDATIONS ==========
@@ -1622,6 +1702,7 @@
       document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
       
       if (tabName === 'analytics') {
+        updateCharts();
         generateAdvancedRecommendations();
       }
     }

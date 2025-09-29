@@ -1,17 +1,227 @@
 {
-  "title": "Pengetahuan Umum",
+  "title": "PENGENALAN TIK",
+  "description": "MATERI 1 TEKNOLOGI INFORMASI DAN KOMUNIKASI",
   "questions": [
     {
-      "question": "Ibukota Indonesia adalah?",
-      "answers": ["Surabaya", "Bandung", "Jakarta", "Medan"],
+      "question": "Apa yang dimaksud dengan Teknologi Informasi dan Komunikasi (TIK)?",
+      "answers": [
+        "Teknologi untuk mengolah makanan",
+        "Teknologi untuk mengelola dan menyampaikan informasi",
+        "Teknologi untuk transportasi",
+        "Teknologi untuk konstruksi bangunan"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Berikut ini yang termasuk alat TIK adalah...",
+      "answers": [
+        "Mesin jahit",
+        "Komputer",
+        "Palu",
+        "Obeng"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Apa fungsi utama dari CPU pada komputer?",
+      "answers": [
+        "Menyimpan data",
+        "Menampilkan gambar",
+        "Memproses data",
+        "Mencetak dokumen"
+      ],
       "correct": 2,
       "points": 100
     },
     {
-      "question": "Planet terdekat dari Matahari?",
-      "answers": ["Venus", "Mars", "Merkurius", "Bumi"],
+      "question": "Perangkat keras (hardware) adalah...",
+      "answers": [
+        "Program yang menjalankan komputer",
+        "Komponen fisik komputer yang dapat disentuh",
+        "Sistem operasi komputer",
+        "Data yang tersimpan di komputer"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Contoh perangkat lunak (software) adalah...",
+      "answers": [
+        "Monitor",
+        "Microsoft Word",
+        "Keyboard",
+        "Mouse"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Apa yang dimaksud dengan sistem operasi?",
+      "answers": [
+        "Perangkat keras untuk menyimpan data",
+        "Perangkat lunak yang mengatur kerja komputer",
+        "Jaringan internet",
+        "Alat input komputer"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Berikut ini yang termasuk perangkat input adalah...",
+      "answers": [
+        "Printer",
+        "Monitor",
+        "Keyboard",
+        "Speaker"
+      ],
       "correct": 2,
-      "points": 150
+      "points": 100
+    },
+    {
+      "question": "Fungsi utama RAM pada komputer adalah...",
+      "answers": [
+        "Menyimpan data secara permanen",
+        "Memproses data secara cepat",
+        "Menyimpan data sementara selama pemrosesan",
+        "Menampilkan output"
+      ],
+      "correct": 2,
+      "points": 100
+    },
+    {
+      "question": "Apa itu perangkat penyimpanan (storage)?",
+      "answers": [
+        "Alat untuk memproses data",
+        "Alat untuk menyimpan data",
+        "Alat untuk menampilkan data",
+        "Alat untuk menginput data"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Berikut ini yang termasuk perangkat output adalah...",
+      "answers": [
+        "Mouse",
+        "Monitor",
+        "Scanner",
+        "Keyboard"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Apa fungsi tombol 'Enter' pada keyboard?",
+      "answers": [
+        "Menghapus teks",
+        "Memindahkan kursor ke baris baru",
+        "Menyimpan dokumen",
+        "Mencetak dokumen"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Contoh perangkat penyimpanan eksternal adalah...",
+      "answers": [
+        "RAM",
+        "Hard Disk",
+        "Flashdisk",
+        "Motherboard"
+      ],
+      "correct": 2,
+      "points": 100
+    },
+    {
+      "question": "Apa itu ikon pada desktop komputer?",
+      "answers": [
+        "Gambar kecil yang mewakili file atau program",
+        "Tombol untuk mematikan komputer",
+        "Perangkat keras komputer",
+        "Jaringan internet"
+      ],
+      "correct": 0,
+      "points": 100
+    },
+    {
+      "question": "Berikut ini yang termasuk sistem operasi adalah...",
+      "answers": [
+        "Microsoft Excel",
+        "Windows",
+        "Adobe Photoshop",
+        "Google Chrome"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Apa fungsi tombol 'Delete' pada keyboard?",
+      "answers": [
+        "Menghapus karakter di sebelah kiri kursor",
+        "Menghapus karakter di sebelah kanan kursor",
+        "Menyimpan dokumen",
+        "Mengganti font"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Apa itu perangkat lunak aplikasi?",
+      "answers": [
+        "Perangkat keras untuk menjalankan komputer",
+        "Program untuk tugas tertentu seperti pengolah kata",
+        "Sistem operasi komputer",
+        "Jaringan komputer"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Berikut ini yang bukan perangkat TIK adalah...",
+      "answers": [
+        "Smartphone",
+        "Laptop",
+        "Mesin cuci",
+        "Tablet"
+      ],
+      "correct": 2,
+      "points": 100
+    },
+    {
+      "question": "Apa fungsi monitor pada komputer?",
+      "answers": [
+        "Memproses data",
+        "Menyimpan data",
+        "Menampilkan output visual",
+        "Menginput data"
+      ],
+      "correct": 2,
+      "points": 100
+    },
+    {
+      "question": "Apa itu booting pada komputer?",
+      "answers": [
+        "Proses mematikan komputer",
+        "Proses menyalakan komputer dan memuat sistem operasi",
+        "Proses mencetak dokumen",
+        "Proses menghapus data"
+      ],
+      "correct": 1,
+      "points": 100
+    },
+    {
+      "question": "Berikut ini yang termasuk perangkat keras adalah...",
+      "answers": [
+        "Microsoft Office",
+        "Motherboard",
+        "Windows",
+        "Google Docs"
+      ],
+      "correct": 1,
+      "points": 100
     }
-  ]
+  ],
+  "createdAt": "2025-09-29T01:42:35.921Z"
 }
